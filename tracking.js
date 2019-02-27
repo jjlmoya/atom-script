@@ -61,9 +61,15 @@ window.$zh.tracking = (function () {
                 }
             });
         },
+        bindClickEvents = function () {
+            document.addEventListener('click', 'a, button', function (e) {
+                trackEvent(window.location.href, 'button: ' + e.target.innerText, 'Click Event', model.acc);
+            });
+        },
         basicEvents = function () {
             setTimeout(timeEvent, 30000);
             scrollDepthEventListener();
+            bindClickEvents();
         };
     basicEvents();
     return {
