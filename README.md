@@ -1,2 +1,1 @@
-# atom-script
-
+# Atom-script
