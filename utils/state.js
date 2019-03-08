@@ -1,4 +1,5 @@
-module.exports = {
+var Status = Status || {};
+Status.active = {
     locators: {
         trigger: '.bs_state',
         activeClass: 'is-active',
@@ -44,3 +45,82 @@ module.exports = {
         }
     }
 };
+
+
+Status.viewPort = {
+    locators: {
+        trigger: '.bs_viewport',
+        activeClass: 'is-visible'
+    },
+
+    model: {
+        elements: [],
+        offset: {
+            y: window.pageYOffset,
+            x: window.pageXOffset,
+            height: window.innerHeight,
+            width: window.innerWidth
+        }
+    },
+
+    isElementOnViewPort: function (el) {
+        var top = el.offsetTop;
+        var left = el.offsetLeft;
+        var width = el.offsetWidth;
+        var height = el.offsetHeight;
+
+        while (el.offsetParent) {
+            el = el.offsetParent;
+            top += el.offsetTop;
+            left += el.offsetLeft;
+        }
+
+        return (
+            top >= window.pageYOffset &&
+            left >= window.pageXOffset &&
+            (top + height) <= (window.pageYOffset + window.innerHeight) &&
+            (left + width) <= (window.pageXOffset + window.innerWidth)
+        );
+    },
+    checkElementsOnViewPort: function (elements) {
+        var isVisible;
+        for (var i = 0; i < elements.length; i++) {
+            isVisible = this.isElementOnViewPort(elements[i]);
+            console.log(isVisible);
+            elements[i].classList
+                .toggle(this.locators.activeClass, isVisible);
+        }
+    },
+    extractData: function (dataset) {
+        return {
+            view: dataset.delay
+        };
+    },
+    bindScroll: function () {
+        var that = this;
+        document.addEventListener('scroll', function () {
+            that.checkElementsOnViewPort(that.model.elements);
+        });
+    },
+    bindEvents: function () {
+        this.bindScroll();
+    },
+    init: function () {
+        this.model.elements = document.querySelectorAll(this.locators.trigger);
+        if (this.model.elements.length === 0) {
+            return;
+        }
+        this.bindEvents();
+
+    },
+
+};
+
+Status.init = function () {
+    this.active.init();
+    this.viewPort.init();
+};
+
+module.exports = Status;
+
+
