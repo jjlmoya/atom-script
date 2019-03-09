@@ -9,7 +9,7 @@ Status.active = {
         if (element.length > 0) {
             element[0].addEventListener(this.locators.eventClick, function () {
                 component.classList.toggle(this.locators.activeClass, state);
-            });
+            }, {passive: true});
         }
     },
     bindClose: function (closeElement, component) {
@@ -50,7 +50,9 @@ Status.active = {
 Status.viewPort = {
     locators: {
         trigger: '.bs_viewport',
-        activeClass: 'is-visible'
+        partialClass: 'is-visible',
+        fullClass: 'is-all-visible',
+        loaded: 'is-loaded'
     },
 
     model: {
@@ -61,6 +63,26 @@ Status.viewPort = {
             height: window.innerHeight,
             width: window.innerWidth
         }
+    },
+
+    isElementOnPartialViewPort: function (el) {
+        var top = el.offsetTop;
+        var left = el.offsetLeft;
+        var width = el.offsetWidth;
+        var height = el.offsetHeight;
+
+        while (el.offsetParent) {
+            el = el.offsetParent;
+            top += el.offsetTop;
+            left += el.offsetLeft;
+        }
+
+        return (
+            top < (window.pageYOffset + window.innerHeight) &&
+            left < (window.pageXOffset + window.innerWidth) &&
+            (top + height) > window.pageYOffset &&
+            (left + width) > window.pageXOffset
+        );
     },
 
     isElementOnViewPort: function (el) {
@@ -83,24 +105,27 @@ Status.viewPort = {
         );
     },
     checkElementsOnViewPort: function (elements) {
-        var isVisible;
+        var isVisible, isFullVisible;
         for (var i = 0; i < elements.length; i++) {
-            isVisible = this.isElementOnViewPort(elements[i]);
-            console.log(isVisible);
+            isVisible = this.isElementOnPartialViewPort(elements[i]);
+            isFullVisible = this.isElementOnViewPort(elements[i]);
+
             elements[i].classList
                 .toggle(this.locators.activeClass, isVisible);
+            elements[i].classList
+                .toggle(this.locators.activeClass, isFullVisible);
+            if (isVisible) {
+                elements[i].classList
+                    .add(this.locators.loaded);
+            }
+
         }
-    },
-    extractData: function (dataset) {
-        return {
-            view: dataset.delay
-        };
     },
     bindScroll: function () {
         var that = this;
         document.addEventListener('scroll', function () {
             that.checkElementsOnViewPort(that.model.elements);
-        });
+        }, {passive: true});
     },
     bindEvents: function () {
         this.bindScroll();
