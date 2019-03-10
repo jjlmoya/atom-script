@@ -126,6 +126,7 @@ Status.viewPort = {
         document.addEventListener('scroll', function () {
             that.checkElementsOnViewPort(that.model.elements);
         }, {passive: true});
+        that.checkElementsOnViewPort(that.model.elements);
     },
     bindEvents: function () {
         this.bindScroll();
