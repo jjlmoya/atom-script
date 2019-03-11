@@ -46,7 +46,6 @@ Status.active = {
     }
 };
 
-
 Status.viewPort = {
     locators: {
         trigger: '.bs_viewport',
@@ -109,11 +108,10 @@ Status.viewPort = {
         for (var i = 0; i < elements.length; i++) {
             isVisible = this.isElementOnPartialViewPort(elements[i]);
             isFullVisible = this.isElementOnViewPort(elements[i]);
-
             elements[i].classList
-                .toggle(this.locators.activeClass, isVisible);
+                .toggle(this.locators.partialClass, isVisible);
             elements[i].classList
-                .toggle(this.locators.activeClass, isFullVisible);
+                .toggle(this.locators.fullClass, isFullVisible);
             if (isVisible) {
                 elements[i].classList
                     .add(this.locators.loaded);
@@ -137,9 +135,7 @@ Status.viewPort = {
             return;
         }
         this.bindEvents();
-
-    },
-
+    }
 };
 
 Status.init = function () {
