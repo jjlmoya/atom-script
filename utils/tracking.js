@@ -73,7 +73,7 @@ module.exports = {
         var that = this;
         setInterval(function () {
             that.model.acc += that.model.stepsInSeconds;
-            that.timeEvent(that.model.acc)
+            that.timeEvent(that.model.acc);
         }, this.model.stepsInSeconds * 1000);
         this.scrollDepthEventListener();
         this.bindClickEvents();
