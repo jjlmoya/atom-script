@@ -14,7 +14,6 @@ module.exports = {
             ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : orig;
     },
     replaceColors: function (elements) {
-        var target;
         for (var i = 0; i < elements.length; i++) {
                 elements[i].innerHTML = "<span class='a-color--replaced'>" + this.RGBToHex(window.getComputedStyle(elements[i])[this.locators.styleTarget]).toUpperCase() + "</span>";
         }
@@ -24,10 +23,5 @@ module.exports = {
         if (elements.length > 0) {
             this.replaceColors(elements);
         }
-        this.RGBToHex(
-            window.getComputedStyle(
-                document.getElementsByClassName(
-                    elements[0].dataset.target)[0]))
-            .toUpperCase();
     },
 };

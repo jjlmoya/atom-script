@@ -1,6 +1,7 @@
 module.exports = {
     model: {
         acc: 0,
+        stepsInSeconds: 30,
         scroll: {
             scroll25: false,
             scroll50: false,
@@ -34,9 +35,8 @@ module.exports = {
             });
         }
     },
-    timeEvent: function () {
-        this.model.acc += 30;
-        this.trackEvent(window.location.href, 'reading', 'Session Time', this.model.acc);
+    timeEvent: function (sessionTime) {
+        this.trackEvent(window.location.href, 'Reading', 'Session Time', sessionTime);
     },
     scrollDepthEvent: function (percent) {
         if (!this.model.scroll['scroll' + percent]) {
@@ -70,7 +70,11 @@ module.exports = {
         });
     },
     basicEvents: function () {
-        setTimeout(this.timeEvent, 30000);
+        var that = this;
+        setInterval(function () {
+            that.model.acc += that.model.stepsInSeconds;
+            that.timeEvent(that.model.acc)
+        }, this.model.stepsInSeconds * 1000);
         this.scrollDepthEventListener();
         this.bindClickEvents();
     }
