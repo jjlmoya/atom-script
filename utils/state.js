@@ -5,24 +5,40 @@ Status.active = {
         activeClass: 'is-active',
         eventClick: 'click'
     },
-    bindToggleElement: function (element, component, state) {
+    bindToggleElement: function (element, component, state, closeClass) {
+        var that = this;
         if (element.length > 0) {
-            element[0].addEventListener(this.locators.eventClick, function () {
-                component.classList.toggle(this.locators.activeClass, state);
+            element[0].addEventListener(this.locators.eventClick, function (e) {
+                if (state || !closeClass || e.target.classList.contains(closeClass)) {
+                    console.log('checks %o', {
+                        state: state,
+                        target: e.target,
+                        close: closeClass
+                    });
+                    component.classList.toggle(that.locators.activeClass, state);
+                }
             }, {passive: true});
         }
     },
     bindClose: function (closeElement, component) {
-        this.bindToggleElement(document.getElementsByClassName(closeElement), component, false);
+        if (closeElement) {
+            this.bindToggleElement(document.getElementsByClassName(closeElement), component, false, closeElement);
+        }
 
     },
     bindActive: function (activeElement, component) {
-        this.bindToggleElement(document.getElementsByClassName(activeElement), component, true);
+        if (activeElement) {
+            this.bindToggleElement(document.getElementsByClassName(activeElement), component, true);
+        }
+    },
+    addActiveClass: function (component) {
+        component.classList.add(this.locators.activeClass);
     },
     bindDelay: function (timeout, component) {
+        var that = this;
         if (timeout) {
             setTimeout(function () {
-                component.classList.add(this.locators.activeClass);
+                that.addActiveClass(component);
             }, timeout);
         }
     },
