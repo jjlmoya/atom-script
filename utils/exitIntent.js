@@ -4,8 +4,7 @@ module.exports = {
     },
     model: {
         localStorage: 'budget-exit-intent',
-        activated: false,
-        dayInMilisec: 24*60*60*1000
+        dayInMilisec: 24 * 60 * 60 * 1000
     },
 
     isMouseOutside: function (e) {
@@ -13,25 +12,26 @@ module.exports = {
     },
 
     getShowedDay: function () {
-        var registeredDate = localStorage.getItem(this.model.localStorage)
-        registeredDate = registeredDate ? new Date(registeredDate) : new Date(0);
+        var registeredDate = localStorage.getItem(this.model.localStorage);
+        console.log(typeof(registeredDate));
+        registeredDate = registeredDate ?
+            new Date(parseInt(registeredDate)) : new Date(0);
         return registeredDate;
     },
+
     isDateOldEnough: function (today, register, maxDays) {
-        return today.getTime() - (maxDays * model.dayInMilisec) - register.getTime() < 0;
+        return (today.getTime() - register.getTime()) / (this.model.dayInMilisec * maxDays) > 1;
     },
     modalRulesPass: function (settings) {
-       // return this.isDateOldEnough(new Date(),this.getShowedDay(), maxDaysForShow());
-        return true;
+        console.log(settings);
+        return this.isDateOldEnough(new Date(), this.getShowedDay(), settings.every);
     },
     triggerExitIntent: function (element) {
         var settings = element.dataset;
         var that = this;
         document.addEventListener("mouseleave", function (event) {
             if (that.isMouseOutside(event) &&
-                !that.model.activated &&
                 that.modalRulesPass(settings)) {
-                that.model.activated = true;
                 localStorage.setItem('budget-exit-intent', new Date().getTime());
                 setTimeout(function () {
                     document.getElementsByClassName(settings.popup)[0].classList.add('is-active');
