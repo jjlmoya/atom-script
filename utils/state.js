@@ -10,11 +10,7 @@ Status.active = {
         if (element.length > 0) {
             element[0].addEventListener(this.locators.eventClick, function (e) {
                 if (state || !closeClass || e.target.classList.contains(closeClass)) {
-                    console.log('checks %o', {
-                        state: state,
-                        target: e.target,
-                        close: closeClass
-                    });
+                    document.body.classList.remove('overflow-blocked');
                     component.classList.toggle(that.locators.activeClass, state);
                 }
             }, {passive: true});

@@ -23,7 +23,6 @@ module.exports = {
         return (today.getTime() - register.getTime()) / (this.model.dayInMilisec * maxDays) > 1;
     },
     modalRulesPass: function (settings) {
-        console.log(settings);
         return this.isDateOldEnough(new Date(), this.getShowedDay(), settings.every);
     },
     triggerExitIntent: function (element) {
@@ -35,6 +34,7 @@ module.exports = {
                 localStorage.setItem('budget-exit-intent', new Date().getTime());
                 setTimeout(function () {
                     document.getElementsByClassName(settings.popup)[0].classList.add('is-active');
+                    document.body.classList.add('overflow-blocked');
                 }, settings.exitDelay);
 
             }
