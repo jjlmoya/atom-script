@@ -1,17 +1,14 @@
-var stateUtils = require('./utils/state'),
-    trackingUtils = require('./utils/tracking'),
-    colorsUtil = require('./utils/color'),
-    socialMedia = require('./utils/socialMedia'),
-    exitIntent = require('./utils/exitIntent');
-
 (function () {
-    var init = function () {
-        stateUtils.init();
-        trackingUtils.basicEvents();
-        colorsUtil.init();
-        exitIntent.init();
-        socialMedia.init();
+    var initUtils = function () {
+        require('./utils/state').init();
+        require('./utils/tracking').basicEvents();
+        require('./utils/color').init();
+        require('./utils/socialMedia').init();
+        require('./utils/exitIntent').init();
+    }, initServices = function () {
+        require('./service/heading').init('.bs_anchor h2', '#');
     };
-    init();
+    initUtils();
+    initServices();
 })();
 
