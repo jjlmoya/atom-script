@@ -6,9 +6,8 @@
         require('./utils/socialMedia').init();
         require('./utils/exitIntent').init();
     }, initServices = function () {
-        require('./service/heading').init('.bs_anchor h2', '<span class="a-text--shadow a-text--uppercase">#</span>');
+        require('./service/heading').init('.bs_anchor h2', '<span class="a-text--shadow a-text--uppercase a-pad--x-5">#</span>');
     };
     initUtils();
     initServices();
 })();
-
