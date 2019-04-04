@@ -65,7 +65,6 @@ Status.viewPort = {
         fullClass: 'is-all-visible',
         loaded: 'is-loaded'
     },
-
     model: {
         elements: [],
         offset: {
@@ -87,7 +86,6 @@ Status.viewPort = {
             top += el.offsetTop;
             left += el.offsetLeft;
         }
-
         return (
             top < (window.pageYOffset + window.innerHeight) &&
             left < (window.pageXOffset + window.innerWidth) &&
