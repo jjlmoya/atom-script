@@ -5,22 +5,27 @@ module.exports = {
         slide: '.bs_slide',
         button: '.bs_slider_button'
     },
+    onScroll: function (slider, slideClass) {
+        let slides = slider.querySelectorAll(slideClass),
+            buttons = this.getSliderButtons(slider) || [],
+            activeIndex = this.getActiveSlider(slides, slider);
+        this.removeActiveClass(this.locators.slide);
+        slides[activeIndex].classList.add('is-active');
+        if (buttons.length > 0) {
+            this.removeActiveClass(this.locators.button);
+            buttons[activeIndex].classList.add('is-active');
+        }
+    },
+
     bindScrollEvents: function () {
         var that = this,
             sliders = document.querySelectorAll(this.locators.content),
             slideClass = this.locators.slide;
         sliders.forEach(function (slider) {
             slider.addEventListener('scroll', function (e) {
-                let slides = e.target.querySelectorAll(slideClass),
-                    buttons = that.getSliderButtons(e.target) || [],
-                    activeIndex = that.getActiveSlider(slides, e.target);
-                that.removeActiveClass(that.locators.slide);
-                slides[activeIndex].classList.add('is-active');
-                if (buttons.length > 0) {
-                    that.removeActiveClass(that.locators.button);
-                    buttons[activeIndex].classList.add('is-active');
-                }
+                that.onScroll(e.target, slideClass);
             });
+            that.onScroll(slider, slideClass);
         });
     },
 
