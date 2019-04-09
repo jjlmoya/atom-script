@@ -10,7 +10,7 @@ Theme.Events = {
     },
 
 
-    extractData: function (dataset) {
+    extractData: (dataset) => {
         return {
             close: dataset.close,
             delay: dataset.delay,
@@ -18,10 +18,10 @@ Theme.Events = {
         };
     },
 
-    bindEvents: function () {
+    bindEvents: () => {
 
     },
-    init: function () {
+    init: () => {
         this.model.elements = document.querySelectorAll(this.locators.trigger);
         if (this.model.elements.length === 0) {
             return;
@@ -32,7 +32,7 @@ Theme.Events = {
 
 };
 
-Theme.init = function () {
+Theme.init = () => {
     Theme.Events.init();
 };
 

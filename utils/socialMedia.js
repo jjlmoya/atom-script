@@ -13,7 +13,7 @@ module.exports = {
     },
     social: {
         mappers: {
-            twitter: function (data) {
+            twitter: (data) => {
                 return {
                     url: data.link,
                     text: data.text,
@@ -21,14 +21,14 @@ module.exports = {
                     via: data.via
                 };
             },
-            facebook: function (data) {
+            facebook: (data) => {
                 return {
                     u: data.link,
                     quote: data.text,
                     hashtags: data.hashtags
                 };
             },
-            linkedin: function (data) {
+            linkedin: (data) => {
                 return {
                     url: data.link,
                     mini: true,
@@ -37,12 +37,12 @@ module.exports = {
                     source: data.link
                 };
             },
-            whatsapp: function (data) {
+            whatsapp: (data) => {
                 return {
                     text: data.link
                 };
             },
-            google: function (data) {
+            google: (data) => {
                 return {
                     text: data.text,
                     url: data.link
@@ -50,7 +50,7 @@ module.exports = {
             }
         },
         action: {
-            paramsToArray: function (data) {
+            paramsToArray: (data) => {
                 var params = [];
                 for (var value in data) {
                     if (data && data[value]) {
@@ -59,34 +59,34 @@ module.exports = {
                 }
                 return params;
             },
-            redirectToSocialMedia: function (baseUrl, data) {
+            redirectToSocialMedia: (baseUrl, data) => {
                 window.open(baseUrl + this.paramsToArray(data).join('&'));
             },
-            twitter: function (data) {
+            twitter: (data) => {
                 this.redirectToSocialMedia('https://twitter.com/share?', data);
             },
 
-            facebook: function (data) {
+            facebook: (data) => {
                 this.redirectToSocialMedia('https://www.facebook.com/sharer/sharer.php?', data);
             },
 
-            linkedin: function (data) {
+            linkedin: (data) => {
                 this.redirectToSocialMedia('https://www.linkedin.com/shareArticle?', data);
             },
 
-            whatsapp: function (data) {
+            whatsapp: (data) => {
                 this.redirectToSocialMedia('whatsapp://send?', data);
             },
 
-            google: function (data) {
+            google: (data) => {
                 this.redirectToSocialMedia('https://plus.google.com/share?', data);
             }
         }
     },
 
-    bindListener: function (elementAction) {
+    bindListener: (elementAction) => {
         var that = this;
-        elementAction.addEventListener('click', function (event) {
+        elementAction.addEventListener('click', (event) => {
             var element = event.target.closest('.' + that.locators.social.init),
                 elementData = element.dataset,
                 network = elementData.social,
@@ -97,20 +97,20 @@ module.exports = {
             }
         });
     },
-    addSocialListener: function () {
+    addSocialListener: () => {
         var elements = document.getElementsByClassName(this.locators.social.init);
         for (var i = 0; i < elements.length; i++) {
             this.bindListener(elements[i]);
         }
     },
-    getFilledElement: function (element, elementData) {
+    getFilledElement: (element, elementData) => {
         var socialTarget = elementData.target,
             targetById = document.getElementById(socialTarget),
             target = !!targetById ? targetById : document.querySelector('.' + socialTarget);
         return !!target ? target : element;
     },
 
-    getParamsByNetwork: function (element, network) {
+    getParamsByNetwork: (element, network) => {
         var socialMap = this.locators.social.data,
             dataset = element.dataset,
             settings = ({
@@ -124,7 +124,7 @@ module.exports = {
         return this.social.mappers[network](settings);
     },
 
-    init: function () {
+    init: () => {
         this.addSocialListener();
     }
 };

@@ -9,7 +9,7 @@ module.exports = {
 
         }
     },
-    trackEvent: function (eventLabel, eventAction, eventCategory, eventValue) {
+    trackEvent: (eventLabel, eventAction, eventCategory, eventValue) => {
         if (window.location.href.indexOf('http://localhost') > -1) {
             console.log('Analytics -> %o', {
                 eventLabel: eventLabel,
@@ -35,43 +35,43 @@ module.exports = {
             });
         }
     },
-    timeEvent: function (sessionTime) {
+    timeEvent: (sessionTime) => {
         this.trackEvent(window.location.href, 'Reading', 'Session Time', sessionTime);
     },
-    scrollDepthEvent: function (percent) {
+    scrollDepthEvent: (percent) => {
         if (!this.model.scroll['scroll' + percent]) {
             this.trackEvent(window.location.href, 'scrolled ' + percent, 'Scroll', percent);
             this.model.scroll['scroll' + percent] = true;
         }
 
     },
-    getScrollPercent: function () {
+    getScrollPercent: () => {
         var h = document.documentElement,
             b = document.body,
             st = 'scrollTop',
             sh = 'scrollHeight';
         return Math.round((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100);
     },
-    scrollDepthEventListener: function () {
+    scrollDepthEventListener: () => {
         var that = this;
-        document.addEventListener('scroll', function () {
+        document.addEventListener('scroll', () => {
             var percent = that.getScrollPercent();
             if (percent % 25 === 0 && percent !== 0) {
                 that.scrollDepthEvent(percent);
             }
         });
     },
-    bindClickEvents: function () {
+    bindClickEvents: () => {
         var that = this;
-        document.addEventListener('click', function (e) {
+        document.addEventListener('click', (e) => {
             if (e.target.matches('a, button')) {
                 that.trackEvent(window.location.href, 'button: ' + e.target.innerText, 'Click Event', that.model.acc);
             }
         });
     },
-    basicEvents: function () {
+    basicEvents: () => {
         var that = this;
-        setInterval(function () {
+        setInterval(() => {
             that.model.acc += that.model.stepsInSeconds;
             that.timeEvent(that.model.acc);
         }, this.model.stepsInSeconds * 1000);

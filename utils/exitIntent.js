@@ -7,11 +7,11 @@ module.exports = {
         dayInMilisec: 24 * 60 * 60 * 1000
     },
 
-    isMouseOutside: function (e) {
+    isMouseOutside: (e) => {
         return e.clientY < 0;
     },
 
-    getShowedDay: function () {
+    getShowedDay: () => {
         var registeredDate = localStorage.getItem(this.model.localStorage);
         console.log(typeof(registeredDate));
         registeredDate = registeredDate ?
@@ -19,20 +19,20 @@ module.exports = {
         return registeredDate;
     },
 
-    isDateOldEnough: function (today, register, maxDays) {
+    isDateOldEnough: (today, register, maxDays) => {
         return (today.getTime() - register.getTime()) / (this.model.dayInMilisec * maxDays) > 1;
     },
-    modalRulesPass: function (settings) {
+    modalRulesPass: (settings) => {
         return this.isDateOldEnough(new Date(), this.getShowedDay(), settings.every);
     },
-    triggerExitIntent: function (element) {
+    triggerExitIntent: (element) => {
         var settings = element.dataset;
         var that = this;
-        document.addEventListener("mouseleave", function (event) {
+        document.addEventListener("mouseleave", (event) => {
             if (that.isMouseOutside(event) &&
                 that.modalRulesPass(settings)) {
                 localStorage.setItem('budget-exit-intent', new Date().getTime());
-                setTimeout(function () {
+                setTimeout(() => {
                     document.getElementsByClassName(settings.popup)[0].classList.add('is-active');
                     document.body.classList.add('overflow-blocked');
                 }, settings.exitDelay);
@@ -40,7 +40,7 @@ module.exports = {
             }
         }, false);
     },
-    init: function () {
+    init: () => {
         var elements = document.getElementsByClassName(this.locators.trigger);
         if (elements.length > 0) {
             this.triggerExitIntent(elements[0]);

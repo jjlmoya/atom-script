@@ -1,11 +1,11 @@
-(function () {
-    var initUtils = function () {
+(() => {
+    var initUtils = () => {
         require('./utils/state').init();
         require('./utils/tracking').basicEvents();
         require('./utils/color').init();
         require('./utils/socialMedia').init();
         require('./utils/exitIntent').init();
-    }, initServices = function () {
+    }, initServices = () => {
         require('./service/heading').init('.bs_anchor h2', '<span class="a-text--shadow a-text--uppercase a-pad--x-5">#</span>');
     };
     initUtils();
