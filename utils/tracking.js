@@ -9,7 +9,7 @@ module.exports = {
 
         }
     },
-    trackEvent: (eventLabel, eventAction, eventCategory, eventValue) => {
+    trackEvent: function (eventLabel, eventAction, eventCategory, eventValue) {
         if (window.location.href.indexOf('http://localhost') > -1) {
             console.log('Analytics -> %o', {
                 eventLabel: eventLabel,
@@ -35,35 +35,35 @@ module.exports = {
             });
         }
     },
-    timeEvent: (sessionTime) => {
+    timeEvent: function (sessionTime) {
         this.trackEvent(window.location.href, 'Reading', 'Session Time', sessionTime);
     },
-    scrollDepthEvent: (percent) => {
+    scrollDepthEvent: function (percent) {
         if (!this.model.scroll['scroll' + percent]) {
             this.trackEvent(window.location.href, 'scrolled ' + percent, 'Scroll', percent);
             this.model.scroll['scroll' + percent] = true;
         }
 
     },
-    getScrollPercent: () => {
+    getScrollPercent: function () {
         var h = document.documentElement,
             b = document.body,
             st = 'scrollTop',
             sh = 'scrollHeight';
         return Math.round((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100);
     },
-    scrollDepthEventListener: () => {
+    scrollDepthEventListener: function () {
         var that = this;
-        document.addEventListener('scroll', () => {
+        document.addEventListener('scroll', function () {
             var percent = that.getScrollPercent();
             if (percent % 25 === 0 && percent !== 0) {
                 that.scrollDepthEvent(percent);
             }
         });
     },
-    bindClickEvents: () => {
+    bindClickEvents: function () {
         var that = this;
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', function (e) {
             if (e.target.matches('a, button')) {
                 that.trackEvent(window.location.href, 'button: ' + e.target.innerText, 'Click Event', that.model.acc);
             }
@@ -71,7 +71,7 @@ module.exports = {
     },
     basicEvents: function () {
         var that = this;
-        setInterval(() => {
+        setInterval(function () {
             that.model.acc += that.model.stepsInSeconds;
             that.timeEvent(that.model.acc);
         }, that.model.stepsInSeconds * 1000);

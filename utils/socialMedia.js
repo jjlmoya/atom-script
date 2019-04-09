@@ -13,7 +13,7 @@ module.exports = {
     },
     social: {
         mappers: {
-            twitter: (data) => {
+            twitter: function (data) {
                 return {
                     url: data.link,
                     text: data.text,
@@ -21,14 +21,14 @@ module.exports = {
                     via: data.via
                 };
             },
-            facebook: (data) => {
+            facebook: function (data) {
                 return {
                     u: data.link,
                     quote: data.text,
                     hashtags: data.hashtags
                 };
             },
-            linkedin: (data) => {
+            linkedin: function (data) {
                 return {
                     url: data.link,
                     mini: true,
@@ -37,12 +37,12 @@ module.exports = {
                     source: data.link
                 };
             },
-            whatsapp: (data) => {
+            whatsapp: function (data) {
                 return {
                     text: data.link
                 };
             },
-            google: (data) => {
+            google: function (data) {
                 return {
                     text: data.text,
                     url: data.link
@@ -50,7 +50,7 @@ module.exports = {
             }
         },
         action: {
-            paramsToArray: (data) => {
+            paramsToArray: function (data) {
                 var params = [];
                 for (var value in data) {
                     if (data && data[value]) {
@@ -59,34 +59,34 @@ module.exports = {
                 }
                 return params;
             },
-            redirectToSocialMedia: (baseUrl, data) => {
+            redirectToSocialMedia: function (baseUrl, data) {
                 window.open(baseUrl + this.paramsToArray(data).join('&'));
             },
-            twitter: (data) => {
+            twitter: function (data) {
                 this.redirectToSocialMedia('https://twitter.com/share?', data);
             },
 
-            facebook: (data) => {
+            facebook: function (data) {
                 this.redirectToSocialMedia('https://www.facebook.com/sharer/sharer.php?', data);
             },
 
-            linkedin: (data) => {
+            linkedin: function (data) {
                 this.redirectToSocialMedia('https://www.linkedin.com/shareArticle?', data);
             },
 
-            whatsapp: (data) => {
+            whatsapp: function (data) {
                 this.redirectToSocialMedia('whatsapp://send?', data);
             },
 
-            google: (data) => {
+            google: function (data) {
                 this.redirectToSocialMedia('https://plus.google.com/share?', data);
             }
         }
     },
 
-    bindListener: (elementAction) => {
+    bindListener: function (elementAction) {
         var that = this;
-        elementAction.addEventListener('click', (event) => {
+        elementAction.addEventListener('click', function (event) {
             var element = event.target.closest('.' + that.locators.social.init),
                 elementData = element.dataset,
                 network = elementData.social,
@@ -103,14 +103,14 @@ module.exports = {
             this.bindListener(elements[i]);
         }
     },
-    getFilledElement: (element, elementData) => {
+    getFilledElement: function (element, elementData) {
         var socialTarget = elementData.target,
             targetById = document.getElementById(socialTarget),
             target = !!targetById ? targetById : document.querySelector('.' + socialTarget);
         return !!target ? target : element;
     },
 
-    getParamsByNetwork: (element, network) => {
+    getParamsByNetwork: function (element, network) {
         var socialMap = this.locators.social.data,
             dataset = element.dataset,
             settings = ({
@@ -120,7 +120,6 @@ module.exports = {
                 hashtags: dataset[socialMap.hashtags],
                 via: dataset[socialMap.via]
             });
-        console.log({socialMap: socialMap, settings: settings, dataset: dataset, mappers: this.social.mappers});
         return this.social.mappers[network](settings);
     },
 

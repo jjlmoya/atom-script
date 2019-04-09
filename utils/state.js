@@ -5,10 +5,10 @@ Status.active = {
         activeClass: 'is-active',
         eventClick: 'click'
     },
-    bindToggleElement: (element, component, state, closeClass) => {
+    bindToggleElement: function (element, component, state, closeClass) {
         var that = this;
         if (element.length > 0) {
-            element[0].addEventListener(this.locators.eventClick, (e) => {
+            element[0].addEventListener(this.locators.eventClick, function (e) {
                 if (state || !closeClass || e.target.classList.contains(closeClass)) {
                     document.body.classList.remove('overflow-blocked');
                     component.classList.toggle(that.locators.activeClass, state);
@@ -16,36 +16,36 @@ Status.active = {
             }, {passive: true});
         }
     },
-    bindClose: (closeElement, component) => {
+    bindClose: function (closeElement, component) {
         if (closeElement) {
             this.bindToggleElement(document.getElementsByClassName(closeElement), component, false, closeElement);
         }
 
     },
-    bindActive: (activeElement, component) => {
+    bindActive: function (activeElement, component) {
         if (activeElement) {
             this.bindToggleElement(document.getElementsByClassName(activeElement), component, true);
         }
     },
-    addActiveClass: (component) => {
+    addActiveClass: function (component) {
         component.classList.add(this.locators.activeClass);
     },
-    bindDelay: (timeout, component) => {
+    bindDelay: function (timeout, component) {
         var that = this;
         if (timeout) {
-            setTimeout(() => {
+            setTimeout(function () {
                 that.addActiveClass(component);
             }, timeout);
         }
     },
-    extractData: (dataset) => {
+    extractData: function (dataset) {
         return {
             close: dataset.close,
             delay: dataset.delay,
             active: dataset.active
         };
     },
-    bindEvents: (settings, component) => {
+    bindEvents: function (settings, component) {
         this.bindClose(settings.close, component);
         this.bindDelay(settings.delay, component);
         this.bindActive(settings.active, component);
@@ -75,7 +75,7 @@ Status.viewPort = {
         }
     },
 
-    isElementOnPartialViewPort: (el) => {
+    isElementOnPartialViewPort: function (el) {
         var top = el.offsetTop;
         var left = el.offsetLeft;
         var width = el.offsetWidth;
@@ -94,7 +94,7 @@ Status.viewPort = {
         );
     },
 
-    isElementOnViewPort: (el) => {
+    isElementOnViewPort: function (el) {
         var top = el.offsetTop;
         var left = el.offsetLeft;
         var width = el.offsetWidth;
@@ -113,7 +113,7 @@ Status.viewPort = {
             (left + width) <= (window.pageXOffset + window.innerWidth)
         );
     },
-    checkElementsOnViewPort: (elements) => {
+    checkElementsOnViewPort: function (elements) {
         var isVisible, isFullVisible;
         for (var i = 0; i < elements.length; i++) {
             isVisible = this.isElementOnPartialViewPort(elements[i]);
@@ -129,14 +129,14 @@ Status.viewPort = {
 
         }
     },
-    bindScroll: () => {
+    bindScroll: function () {
         var that = this;
-        document.addEventListener('scroll', () => {
+        document.addEventListener('scroll', function () {
             that.checkElementsOnViewPort(that.model.elements);
         }, {passive: true});
         that.checkElementsOnViewPort(that.model.elements);
     },
-    bindEvents: () => {
+    bindEvents: function () {
         this.bindScroll();
     },
     init: function () {

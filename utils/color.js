@@ -3,7 +3,7 @@ module.exports = {
         trigger: 'bs_color_replace',
         styleTarget: 'backgroundColor'
     },
-    RGBToHex: (orig) => {
+    RGBToHex: function (orig) {
         if (!orig.replace) {
             return '';
         }
@@ -13,9 +13,9 @@ module.exports = {
             ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
             ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : orig;
     },
-    replaceColors: (elements) => {
+    replaceColors: function (elements) {
         for (var i = 0; i < elements.length; i++) {
-                elements[i].innerHTML = "<span class='a-color--replaced'>" + this.RGBToHex(window.getComputedStyle(elements[i])[this.locators.styleTarget]).toUpperCase() + "</span>";
+            elements[i].innerHTML = "<span class='a-color--replaced'>" + this.RGBToHex(window.getComputedStyle(elements[i])[this.locators.styleTarget]).toUpperCase() + "</span>";
         }
     },
     init: function () {
