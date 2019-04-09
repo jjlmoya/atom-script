@@ -21,7 +21,7 @@ Theme.Events = {
     bindEvents: () => {
 
     },
-    init: () => {
+    init: function () {
         this.model.elements = document.querySelectorAll(this.locators.trigger);
         if (this.model.elements.length === 0) {
             return;

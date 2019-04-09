@@ -18,7 +18,7 @@ module.exports = {
                 elements[i].innerHTML = "<span class='a-color--replaced'>" + this.RGBToHex(window.getComputedStyle(elements[i])[this.locators.styleTarget]).toUpperCase() + "</span>";
         }
     },
-    init: () => {
+    init: function () {
         var elements = document.getElementsByClassName(this.locators.trigger);
         if (elements.length > 0) {
             this.replaceColors(elements);

@@ -40,7 +40,7 @@ module.exports = {
             }
         }, false);
     },
-    init: () => {
+    init: function() {
         var elements = document.getElementsByClassName(this.locators.trigger);
         if (elements.length > 0) {
             this.triggerExitIntent(elements[0]);

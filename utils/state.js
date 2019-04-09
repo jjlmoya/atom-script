@@ -50,7 +50,7 @@ Status.active = {
         this.bindDelay(settings.delay, component);
         this.bindActive(settings.active, component);
     },
-    init: () => {
+    init: function () {
         var elementsToActive = document.querySelectorAll(this.locators.trigger);
         for (var i = 0; i < elementsToActive.length; i++) {
             this.bindEvents(this.extractData(elementsToActive[i].dataset), elementsToActive[i]);
@@ -139,7 +139,7 @@ Status.viewPort = {
     bindEvents: () => {
         this.bindScroll();
     },
-    init: () => {
+    init: function () {
         this.model.elements = document.querySelectorAll(this.locators.trigger);
         if (this.model.elements.length === 0) {
             return;
@@ -148,7 +148,7 @@ Status.viewPort = {
     }
 };
 
-Status.init = () => {
+Status.init = function () {
     this.active.init();
     this.viewPort.init();
 };

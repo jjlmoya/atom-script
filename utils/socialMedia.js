@@ -97,7 +97,7 @@ module.exports = {
             }
         });
     },
-    addSocialListener: () => {
+    addSocialListener: function () {
         var elements = document.getElementsByClassName(this.locators.social.init);
         for (var i = 0; i < elements.length; i++) {
             this.bindListener(elements[i]);
@@ -124,7 +124,7 @@ module.exports = {
         return this.social.mappers[network](settings);
     },
 
-    init: () => {
+    init: function () {
         this.addSocialListener();
     }
 };

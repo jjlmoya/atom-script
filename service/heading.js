@@ -15,7 +15,7 @@ module.exports = {
             .replace(/-+/g, '-'); // collapse dashes
         return str;
     },
-    renderAnchors: (elements, prepend) => {
+    renderAnchors: function (elements, prepend) {
         var containerHTML = '',
             container = document.getElementsByClassName(this.locators.container),
             settings = container.length > 0 ? container[0].dataset : {};
@@ -44,7 +44,7 @@ module.exports = {
     getHeadingElements: (selector) => {
         return document.querySelectorAll(selector);
     },
-    init: (selector, prepend) => {
+    init: function (selector, prepend) {
         var elements = this.getHeadingElements(selector);
         this.renderAnchors(elements, prepend);
     }

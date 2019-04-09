@@ -69,12 +69,12 @@ module.exports = {
             }
         });
     },
-    basicEvents: () => {
+    basicEvents: function () {
         var that = this;
         setInterval(() => {
             that.model.acc += that.model.stepsInSeconds;
             that.timeEvent(that.model.acc);
-        }, this.model.stepsInSeconds * 1000);
+        }, that.model.stepsInSeconds * 1000);
         this.scrollDepthEventListener();
         this.bindClickEvents();
     }
