@@ -1,39 +1,24 @@
 var Theme = Theme || {};
-Theme.Brands = require('theme');
-
-Theme.Events = {
-    locators: {
-        trigger: '.bs_theme',
-    },
+Utils = require('../utils/misc');
+Theme.Parameter = {
     model: {
-        elements: []
+        storageKey: 'bonseo_theme',
     },
-
-
-    extractData: (dataset) => {
-        return {
-            close: dataset.close,
-            delay: dataset.delay,
-            active: dataset.active
-        };
-    },
-
-    bindEvents: () => {
-
+    getLocalBrand: function () {
+        return localStorage.getItem(this.model.storageKey);
     },
     init: function () {
-        this.model.elements = document.querySelectorAll(this.locators.trigger);
-        if (this.model.elements.length === 0) {
-            return;
+        const parameters = Utils.searchToObject(window.location.search),
+            brand = parameters.brand || this.getLocalBrand();
+        if (brand) {
+            document.body.className = '';
+            document.body.classList.add(brand);
         }
-        this.bindEvents();
-
-    },
-
+    }
 };
 
 Theme.init = () => {
-    Theme.Events.init();
+    Theme.Parameter.init();
 };
 
 module.exports = Theme;
