@@ -31,3 +31,18 @@ Theme.init = () => {
 };
 
 module.exports = Theme;
+/**
+ *
+ * Write a JavaScript method receiving an array of objects containing name+age+gender,
+ * returning everyone between 30 and 40 years old grouped by gender. Keep it simple but reusable.
+ * Create a secret gist (https://gist.github.com/) and paste the URL below. *
+ */
+(function () {
+    var model = {},
+        getDataForTest = function () {
+            return [{}];
+        },
+        init = function () {
+        };
+    init();
+})();
