@@ -38,7 +38,7 @@ module.exports = {
         }
     },
     anchorLink: (id, html, settings) => {
-        var linkClass = settings.linkClass;
+        let linkClass = settings.linkClass;
         return '<a class="' + linkClass + '" href="#' + id + '">' + html + '</a>';
     },
     getHeadingElements: (selector) => {
