@@ -1,7 +1,8 @@
-var ImageUtils = ImageUtils || {};
-ImageUtils.replace = {
+var ReplaceUtils = ReplaceUtils || {};
+ReplaceUtils.replace = {
     locators: {
-        trigger: '.bs_image_replace',
+        trigger:'.bs_replace',
+        image: '.bs_image_replace',
     },
     replaceImage: function (target, element) {
         document.querySelector(target).src = element.src;
@@ -12,6 +13,7 @@ ImageUtils.replace = {
             element.addEventListener('click', function (e) {
                 const element = e.target,
                     targetClass = element.dataset.target;
+                console.log(targetClass);
                 if (targetClass) {
                     that.replaceImage(targetClass, element);
                 }
@@ -19,10 +21,10 @@ ImageUtils.replace = {
         });
     },
     init: function () {
-        this.bindReplace(document.querySelectorAll(this.locators.trigger));
+        this.bindReplace(document.querySelectorAll(this.locators.image));
     }
 };
-ImageUtils.init = function () {
+ReplaceUtils.init = function () {
     this.replace.init();
 };
-module.exports = ImageUtils;
+module.exports = ReplaceUtils;
