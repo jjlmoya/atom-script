@@ -13,7 +13,6 @@ ReplaceUtils.replace = {
             element.addEventListener('click', function (e) {
                 const element = e.target,
                     targetClass = element.dataset.target;
-                console.log(targetClass);
                 if (targetClass) {
                     that.replaceImage(targetClass, element);
                 }
