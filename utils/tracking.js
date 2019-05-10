@@ -6,7 +6,6 @@ module.exports = {
             scroll25: false,
             scroll50: false,
             scroll75: false
-
         }
     },
     trackEvent: function (eventLabel, eventAction, eventCategory, eventValue) {
