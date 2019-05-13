@@ -5,7 +5,7 @@ module.exports = {
     model: [],
     renderControl: function (themes) {
         let renderElements = themes.map((theme) => {
-            return `<div class="${theme} a-bg bs_theme_button" 
+            return `<div class="${theme} a-bg bs_theme_button u-pointre" 
                         data-theme="${theme}"
                         style="width:25px; height: 25px; border-radius: 50%"></div>`;
         }).join('');
@@ -17,7 +17,6 @@ module.exports = {
                 'aviator',
                 'diable',
                 'forest',
-                'graylord',
                 'kino',
                 'lime-sports',
                 'lollipop',
@@ -42,7 +41,9 @@ module.exports = {
     addColorThemeAction: function () {
         var that = this, elements = document.querySelectorAll('.bs_theme_button');
         for (var i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', that.actionTheme);
+            elements[i].addEventListener('click', (e) => {
+                that.actionTheme(e)
+            });
         }
     },
     init: function () {
