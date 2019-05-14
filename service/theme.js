@@ -1,11 +1,12 @@
 module.exports = {
     locators: {
-        trigger: 'bs_theme'
+        trigger: 'bs_theme',
+        button: 'bs_theme_button'
     },
     model: [],
     renderControl: function (themes) {
         let renderElements = themes.map((theme) => {
-            return `<div class="${theme} a-bg bs_theme_button u-pointre" 
+            return `<div class="${theme} a-bg ${this.locators.button} u-pointer" 
                         data-theme="${theme}"
                         style="width:25px; height: 25px; border-radius: 50%"></div>`;
         }).join('');
@@ -39,7 +40,7 @@ module.exports = {
         parent.classList.add(e.target.dataset.theme);
     },
     addColorThemeAction: function () {
-        var that = this, elements = document.querySelectorAll('.bs_theme_button');
+        var that = this, elements = document.querySelectorAll('.' + this.locators.button);
         for (var i = 0; i < elements.length; i++) {
             elements[i].addEventListener('click', (e) => {
                 that.actionTheme(e)
