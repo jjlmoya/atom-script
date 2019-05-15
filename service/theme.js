@@ -6,11 +6,10 @@ module.exports = {
     model: [],
     renderControl: function (themes) {
         let renderElements = themes.map((theme) => {
-            return `<div class="${theme} a-bg ${this.locators.button} u-pointer" 
-                        data-theme="${theme}"
-                        style="width:25px; height: 25px; border-radius: 50%"></div>`;
+            return `<div class="ml-theme-selector__item ${theme} a-bg ${this.locators.button} u-pointer u-layer-2" 
+                        data-theme="${theme}"></div>`;
         }).join('');
-        return `<div class="l-position--absolute l-flex">${renderElements}</div>`;
+        return `<div class="ml-theme-selector l-position--absolute l-flex">${renderElements}</div>`;
     },
     getThemes: function (next) {
         next(
@@ -39,12 +38,14 @@ module.exports = {
         this.removeThemes(parent);
         parent.classList.add(e.target.dataset.theme);
     },
-    addColorThemeAction: function () {
+    bindActionToItem: function (elements, i, that) {
+        elements[i].addEventListener('click', (e) => {
+            that.actionTheme(e);
+        });
+    }, addColorThemeAction: function () {
         var that = this, elements = document.querySelectorAll('.' + this.locators.button);
         for (var i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', (e) => {
-                that.actionTheme(e)
-            });
+            this.bindActionToItem(elements, i, that);
         }
     },
     init: function () {
