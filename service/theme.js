@@ -13,19 +13,7 @@ module.exports = {
     },
     getThemes: function (next) {
         next(
-            [
-                'aviator',
-                'diable',
-                'forest',
-                'kino',
-                'lime-sports',
-                'lollipop',
-                'mint',
-                'paradise-orange',
-                'purple-skies',
-                'reverse-sky',
-                'sky'
-            ]);
+            require('../config/index').Themes);
     },
 
     removeThemes: function (element) {
