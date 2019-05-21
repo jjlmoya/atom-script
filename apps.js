@@ -1,5 +1,5 @@
 (() => {
-    var initUtils = () => {
+    const initUtils = () => {
         require('./utils/state').init();
         require('./utils/tracking').basicEvents();
         require('./utils/color').init();
