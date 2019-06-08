@@ -17,7 +17,8 @@ Config.Themes = [
     'paradise-orange',
     'purple-skies',
     'reverse-sky',
-    'sky'
+    'sky',
+    'strawberry'
 ];
 
 module.exports = Config;
