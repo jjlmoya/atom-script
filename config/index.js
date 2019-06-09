@@ -2,6 +2,8 @@ var Config = Config || {};
 
 Config.Themes = [
     'aviator',
+    'blueberry',
+    'cake',
     'caribbean',
     'clouds',
     'celeste',
@@ -18,7 +20,7 @@ Config.Themes = [
     'purple-skies',
     'reverse-sky',
     'sky',
-    'strawberry'
+    'strawberry',
 ];
 
 module.exports = Config;
