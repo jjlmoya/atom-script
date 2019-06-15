@@ -12,6 +12,7 @@ Config.Themes = [
     'graylord',
     'kino',
     'lavandula',
+    'lemon',
     'lime-sports',
     'lollipop',
     'mint',
