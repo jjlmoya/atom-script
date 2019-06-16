@@ -21,6 +21,7 @@ Config.Themes = [
     'purple-skies',
     'reverse-sky',
     'sky',
+    'spring-melody',
     'strawberry',
 ];
 
