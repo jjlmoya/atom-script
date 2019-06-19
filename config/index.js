@@ -23,6 +23,7 @@ Config.Themes = [
     'sky',
     'spring-melody',
     'strawberry',
+    'wood',
 ];
 
 module.exports = Config;
