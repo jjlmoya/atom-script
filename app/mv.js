@@ -1,10 +1,92 @@
 module.exports = (function () {
-    var locators = {
-            filter: '.bs_step_filter'
+    var icons = require('./icon'),
+        locators = {
+            filter: '.bs_step_filter',
+            filterSubcategory: '.bs_step_filter_subcategory',
+            categoryContainer: '.bs_step_category',
+            subCategory: '.bs_step_subcategory',
+            title: '.bs_step_title',
+            offers: '.bs_step_offers',
+            content: '.bs_step_content',
+            hideClass: 'u-hide'
         },
         model = {
-            activeFilters: [],
+            categories: [
+                {
+                    id: 'relax',
+                    cta: 'Relax',
+                    svg: icons.relax,
+                    brand: ''
+                }, {
+                    id: 'work',
+                    cta: 'Trabajo',
+                    svg: icons.work,
+                    brand: '',
+                },
+                {
+                    id: 'sport',
+                    cta: 'Deporte',
+                    svg: icons.sports,
+                    brand: '',
+                },
+                {
+                    id: 'party',
+                    cta: 'Ocio',
+                    svg: icons.party,
+                    brand: '',
+                },
+                {
+                    tag: 'culture',
+                    cta: 'Cultural',
+                    svg: icons.cultural,
+                    brand: '',
+                }],
+            subcategories: [{
+                id: 'ski',
+                cta: 'Esquí',
+                svg: icons.ski,
+                brand: '',
+                categories: ['sports']
+            }],
+            activeCategory: '',
+            activeSubcategory: '',
             offers: []
+        },
+
+        renderButton = function (button, isSubcategory) {
+            var actionClass = isSubcategory ? 'bs_step_filter_subcategory' : 'bs_step_filter';
+            return `<div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-center ${actionClass} a-pad ${button.brand}">
+                            <button class="a-button-svg--square a-svg a-pad a-svg--m a-svg--secondary a-border a-border--secondary a-border--hover--primary a-border--smooth">
+                                ${button.svg}
+                            </button>   
+                        <div class="a-text a-text--link a-text--center a-pad-5">${button.cta}</div>
+                    </div>`;
+        },
+
+        getSubCategoriesByCategory = function (category) {
+            return _.filter(model.subcategories, function (sub) {
+                return sub.categories.join().indexOf(category) > -1;
+            })
+        },
+        renderButtons = function (isSubcategory) {
+            var buttons = isSubcategory ? getSubCategoriesByCategory(model.activeCategory) : model.categories;
+            var html = buttons.map(function (category) {
+                    return renderButton(category, isSubcategory);
+                }).join(''),
+                elementLocator = isSubcategory ? locators.subCategory : locators.categoryContainer;
+            document.querySelector(elementLocator).innerHTML = html;
+        },
+        getCategoryName = function (name) {
+            try {
+                var categories = Object.assign({}, model.categories, model.subcategories);
+                return _.first(_.filter(categories, {id: name})).cta;
+            } catch (e) {
+                return "";
+            }
+        },
+        renderTitle = function () {
+            var title = `Las mejoras Ofertas <span class="a-text--shadow">${model.activeCategory ? 'de ' : ''} ${getCategoryName(model.activeCategory)} ${getCategoryName(model.activeSubcategory)}</span>:`;
+            document.querySelector(locators.title).innerHTML = title;
         },
         renderOffer = function (offer, position) {
             var isDouble = (position + 1) % 4 === 1;
@@ -87,10 +169,10 @@ module.exports = (function () {
                     tags: ['sport', 'family', 'work']
                 },
                 {
-                    name: 'Oferta Deportiva',
+                    name: 'Oferta Deportiva de Ski',
                     price: 25,
                     link: 'https://google.com',
-                    tags: ['sport']
+                    tags: ['sport', 'ski']
                 },
                 {
                     name: 'Oferta Familia',
@@ -102,7 +184,7 @@ module.exports = (function () {
                     name: 'Oferta Trabajo',
                     link: 'https://yahoo.es',
                     price: 25,
-                    tags: ['family']
+                    tags: ['work']
                 }
             ];
             callback();
@@ -113,50 +195,76 @@ module.exports = (function () {
             for (var i = 0; i < offers.length; i++) {
                 html += renderOffer(offers[i], i);
             }
-            document.querySelector('.bs_step_content').innerHTML = html;
+            document.querySelector(locators.content).innerHTML = html;
         },
         showOfferContainers = function () {
             if (model.offers.length > 0) {
-                document.querySelector('.bs_step_offers').classList.remove('u-hide');
+                document.querySelector(locators.offers).classList.remove(locators.hideClass);
             } else {
-                document.querySelector('.bs_step_offers').classList.add('u-hide');
+                document.querySelector(locators.offers).classList.add(locators.hideClass);
             }
         },
-        filterOffersByTags = function (tags) {
-            return _.filter(model.offers, function (offer) {
-                return offer.tags.join('').indexOf(tags[0]) > -1
+        filterOffersByTag = function (tag, offers) {
+            var offers = offers ? offers : model.offers;
+            return _.filter(offers, function (offer) {
+                return offer.tags.join('').indexOf(tag) > -1
             })
         },
-        renderNextPage = function () {
-            var filteredOffers = filterOffersByTags(model.activeFilters);
-            console.log(filteredOffers);
-            renderOffers(filteredOffers);
+
+        renderCategoryPage = function () {
+            renderOffers();
+            renderButtons();
+            renderTitle();
+            bindFilters();
             showOfferContainers();
-        },
-        addFilter = function (element) {
-            var tag = element.dataset.tag;
-            model.activeFilters.push(tag);
             BS.Service.Step.next();
-            renderNextPage();
         },
-        onFilter = function (element) {
+        renderSubCategoryPage = function () {
+            var filteredOffers = filterOffersByTag(model.activeCategory);
+            renderOffers(filteredOffers);
+            renderButtons(true);
+            renderTitle();
+            bindFilters(true);
+            showOfferContainers();
+            BS.Service.Step.next();
+
+        },
+        renderProductPage = function () {
+            var filteredOffers = filterOffersByTag(model.activeSubcategory, filterOffersByTag(model.activeCategory));
+            renderOffers(filteredOffers);
+            renderTitle();
+            showOfferContainers();
+            BS.Service.Step.next();
+        },
+        addFilter = function (element, isSubcategory) {
+            var tag = element.dataset.tag;
+            console.log(model);
+            console.log(isSubcategory);
+            if (isSubcategory) {
+                model.activeSubcategory = tag;
+                renderProductPage();
+            } else {
+                model.activeCategory = tag;
+                renderSubCategoryPage();
+            }
+        },
+        onFilter = function (element, isSubcategory) {
+            var parentLocator = isSubcategory ? locators.filterSubcategory : locators.filter;
             element.addEventListener('mousedown', function (e) {
-                addFilter(e.target.closest(locators.filter));
+                addFilter(e.target.closest(parentLocator), isSubcategory);
             });
         },
-        bindFilters = function () {
-            var elements = document.querySelectorAll(locators.filter);
+        bindFilters = function (isSubcategory) {
+            var elements = isSubcategory
+                ? document.querySelectorAll(locators.filterSubcategory)
+                : document.querySelectorAll(locators.filter);
             for (var i = 0; i < elements.length; i++) {
-                onFilter(elements[i]);
+                onFilter(elements[i], isSubcategory);
             }
         },
         init = function () {
             getOffers(function () {
-                renderOffers();
-                BS.Service.Step.next();
-                bindFilters();
-                showOfferContainers();
-
+                renderCategoryPage();
             });
         };
     setTimeout(init, 300);
