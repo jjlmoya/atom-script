@@ -8,6 +8,7 @@ Config.Themes = [
     'clouds',
     'celeste',
     'diable',
+    'eevee',
     'forest',
     'graylord',
     'kino',
