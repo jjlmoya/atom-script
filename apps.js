@@ -26,5 +26,7 @@
     initUtils();
     initServices();
     publicServices();
+    require('./app/mv')();
 })();
+
 

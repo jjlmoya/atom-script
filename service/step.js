@@ -21,8 +21,8 @@ module.exports = {
         element.classList.add(this.locators.routerClass);
     },
     showNextElement: function () {
+        var elements = this.model.elements;
         try {
-            var elements = this.model.elements;
             this.model.activeIndex++;
             this.activeElement(elements[this.model.activeIndex]);
         } catch (e) {
