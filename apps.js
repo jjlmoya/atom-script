@@ -1,9 +1,4 @@
 (() => {
-    let kass = document.getElementById('kss-node');
-    if (kass) {
-        kass.classList.add('clouds');
-        kass.classList.add('bs_theme');
-    }
     const initUtils = () => {
         require('./utils/state').init();
         require('./utils/tracking').basicEvents();
@@ -26,7 +21,6 @@
     initUtils();
     initServices();
     publicServices();
-    require('./app/mv')();
 })();
 
 

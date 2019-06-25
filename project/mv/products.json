@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Oferta Deporte, Familia y Trabajo",
+    "price": "25",
+    "BHC": 123412,
+    "link": "https://google.es",
+    "tags": [
+      "sport",
+      "family",
+      "work"
+    ]
+  },
+  {
+    "name": "Oferta Deportiva de Ski",
+    "price": 25,
+    "link": "https://google.com",
+    "tags": [
+      "sport",
+      "ski"
+    ]
+  },
+  {
+    "name": "Oferta Familia",
+    "price": 25,
+    "link": "https://google.co.uk",
+    "tags": [
+      "family"
+    ]
+  },
+  {
+    "name": "Oferta Trabajo",
+    "link": "https://yahoo.es",
+    "price": 25,
+    "tags": [
+      "work"
+    ]
+  }
+]
