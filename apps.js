@@ -2,10 +2,10 @@ import './state/index';
 import './slider/index';
 import './tracking/index';
 import './social/index';
+import './theme/color';
 
 (() => {
     const initUtils = () => {
-        require('./utils/color').init();
         require('./utils/socialMedia').init();
         require('./utils/exitIntent').init();
         require('./utils/replace').init();
