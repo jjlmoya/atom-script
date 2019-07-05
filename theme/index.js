@@ -1,36 +1,29 @@
-var Theme = Theme || {},
-    Utils = require('../utils/misc'),
-    Config = require('../config/index');
-Theme.Parameter = {
-    model: {
-        storageKey: 'bonseo_theme',
-        themes: Config.Themes
-    },
-    getLocalBrand: function () {
-        return localStorage.getItem(this.model.storageKey);
-    },
-    removeActiveThemes: function (element) {
-        if (element.className) {
-            this.model.themes.forEach(function (theme) {
-                element.classList.remove(theme);
-            });
-        }
-    },
-    init: function () {
-        const parameters = Utils.searchToObject(window.location.search),
-            brand = parameters.brand || this.getLocalBrand();
-        if (brand) {
-            this.removeActiveThemes(document.body);
-            document.body.classList.add(brand);
-        }
+import {Themes} from '../config/index';
+import {searchToObject} from '../utils/misc';
+
+const model = {
+    storageKey: 'bonseo_theme',
+    themes: Themes
+};
+
+const getLocalBrand = () => localStorage.getItem(model.storageKey);
+const removeActiveThemes = element => {
+    if (element.className) {
+        model.themes.forEach(function (theme) {
+            element.classList.remove(theme);
+        });
     }
 };
 
-Theme.init = () => {
-    Theme.Parameter.init();
-};
+(() => {
+    const parameters = searchToObject(window.location.search),
+        brand = parameters.brand || getLocalBrand();
+    if (brand) {
+        removeActiveThemes(document.body);
+        document.body.classList.add(brand);
+    }
+})();
 
-module.exports = Theme;
 
 
 
