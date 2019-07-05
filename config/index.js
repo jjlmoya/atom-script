@@ -1,6 +1,4 @@
-var Config = Config || {};
-
-Config.Themes = [
+let Themes = [
     'aviator',
     'blueberry',
     'cake',
@@ -27,4 +25,4 @@ Config.Themes = [
     'wood',
 ];
 
-module.exports = Config;
+export {Themes};

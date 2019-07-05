@@ -8,4 +8,4 @@ let WhatsappUrl = (params, redirect) => {
     return redirect('whatsapp://send?', params);
 };
 
-export  {WhatsappData, WhatsappUrl};
+export {WhatsappData, WhatsappUrl};
