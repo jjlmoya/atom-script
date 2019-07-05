@@ -56,7 +56,6 @@ const bindListener = elementAction => {
             elementData = element.dataset,
             network = elementData.social,
             params = getParamsByNetwork(getFilledElement(element, elementData), network);
-        console.log('network %o', network);
         if (social.action[network]) {
             social.action[network](params, redirectToSocialMedia);
         }
@@ -80,8 +79,6 @@ const getParamsByNetwork = (element, network) => {
             hashtags: dataset[socialMap.hashtags],
             via: dataset[socialMap.via]
         });
-    console.log(network);
-    console.log(settings);
     return social.mappers[network](settings);
 };
 (() => {
