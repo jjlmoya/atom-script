@@ -15,7 +15,7 @@ const RGBToHex = orig => {
 };
 
 const replaceColors = elements => {
-    [...elements].forEach(element => {
+    elements.forEach(element => {
         element.innerHTML = `
             <span class='a-color--replaced'>
                 ${RGBToHex(window.getComputedStyle(element)[locators.styleTarget]).toUpperCase()}
@@ -27,8 +27,5 @@ const replaceColors = elements => {
 };
 
 (() => {
-    var elements = document.getElementsByClassName(locators.trigger);
-    if (elements.length > 0) {
-        replaceColors(elements);
-    }
+    replaceColors([... document.getElementsByClassName(locators.trigger)]);
 })();

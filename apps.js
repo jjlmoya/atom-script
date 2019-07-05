@@ -2,7 +2,7 @@ import './state/index';
 import './slider/index';
 import './tracking/index';
 import './social/index';
-import './theme/color';
+
 import './theme/index';
 
 (() => {

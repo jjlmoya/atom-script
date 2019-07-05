@@ -1,5 +1,6 @@
 import {Themes} from '../config/index';
 import {searchToObject} from '../utils/misc';
+import './color';
 
 const model = {
     storageKey: 'bonseo_theme',
