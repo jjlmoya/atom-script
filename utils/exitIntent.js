@@ -33,13 +33,17 @@ const onMouseLeave = (event, settings) => {
     }
 };
 const triggerExitIntent = element => {
+
     document.addEventListener("mouseleave", (event) => {
-        onMouseLeave(event, element.dataset)
+        onMouseLeave(event, element.dataset);
     }, false);
 };
 
 (() => {
-    triggerExitIntent([...document.getElementsByClassName(locators.trigger)].slice(0, 1));
+    let elements = [...document.getElementsByClassName(locators.trigger)].slice(0, 1);
+    if (elements.length > 0) {
+        triggerExitIntent();
+    }
 })();
 
 

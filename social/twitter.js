@@ -8,7 +8,7 @@ const TwitterData = data => {
 };
 
 const TwitterUrl = (params, redirect) => {
-    return redirect('https://www.Twitter.com/sharer/sharer.php?', params);
+    return redirect('https://twitter.com/intent/tweet?', params);
 };
 
 export {TwitterData, TwitterUrl};

@@ -3,7 +3,7 @@ const locators = {
 };
 
 const replaceImage = (target, element) => {
-    document.querySelector(target).src = element.src
+    document.querySelector(target).src = element.src;
 };
 
 const onImageClick = e => {

@@ -15,6 +15,7 @@ const locators = {
 };
 
 const redirectToSocialMedia = (baseUrl, data) => {
+    console.log(baseUrl, data);
     window.open(baseUrl + paramsToArray(data).join('&'));
 };
 
@@ -57,6 +58,7 @@ const bindListener = elementAction => {
             network = elementData.social,
             params = getParamsByNetwork(getFilledElement(element, elementData), network);
         if (social.action[network]) {
+
             social.action[network](params, redirectToSocialMedia);
         }
     });
