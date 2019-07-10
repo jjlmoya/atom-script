@@ -11,4 +11,7 @@ const TwitterUrl = (params, redirect) => {
     return redirect('https://twitter.com/intent/tweet?', params);
 };
 
-export {TwitterData, TwitterUrl};
+export let Twitter = {
+    data: TwitterData,
+    url: TwitterUrl
+};

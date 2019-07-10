@@ -10,4 +10,7 @@ const FacebookUrl = (params, redirect) => {
     return redirect('https://www.facebook.com/sharer/sharer.php?', params);
 };
 
-export  {FacebookData, FacebookUrl};
+export let Facebook = {
+    data: FacebookData,
+    url: FacebookUrl
+};

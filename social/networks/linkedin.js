@@ -12,4 +12,7 @@ const LinkedinUrl = (params, redirect) => {
     return redirect('https://www.linkedin.com/shareArticle?', params);
 };
 
-export {LinkedinData, LinkedinUrl};
+export let Linkedin = {
+    data: LinkedinData,
+    url: LinkedinUrl
+};

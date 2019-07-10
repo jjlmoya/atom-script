@@ -1,7 +1,7 @@
-import {FacebookData, FacebookUrl} from './facebook';
-import {TwitterData, TwitterUrl} from './twitter';
-import {LinkedinData, LinkedinUrl} from './linkedin';
-import {WhatsappData, WhatsappUrl} from './whatsapp';
+import {Facebook} from './networks/facebook';
+import {Twitter} from './networks/twitter';
+import {Linkedin} from './networks/linkedin';
+import {Whatsapp} from './networks/whatsapp';
 
 const locators = {
     init: 'bs_social_media',
@@ -15,28 +15,27 @@ const locators = {
 };
 
 const redirectToSocialMedia = (baseUrl, data) => {
-    console.log(baseUrl, data);
     window.open(baseUrl + paramsToArray(data).join('&'));
 };
 
 const social = {
     mappers: {
-        twitter: TwitterData,
-        facebook: FacebookData,
-        linkedin: LinkedinData,
-        whatsapp: WhatsappData
+        twitter: Twitter.data,
+        facebook: Facebook.data,
+        linkedin: Linkedin.data,
+        whatsapp: Whatsapp.data
     },
     action: {
-        twitter: TwitterUrl,
-        facebook: FacebookUrl,
-        linkedin: LinkedinUrl,
-        whatsapp: WhatsappUrl
+        twitter: Twitter.url,
+        facebook: Facebook.url,
+        linkedin: Linkedin.url,
+        whatsapp: Whatsapp.url
     }
 };
 
 const paramsToArray = data => {
-    var params = [];
-    for (var value in data) {
+    let params = [];
+    for (let value in data) {
         if (data && data[value]) {
             params.push(value + '=' + encodeURIComponent(data[value]));
         }
@@ -53,7 +52,7 @@ const addSocialListener = () => {
 
 const bindListener = elementAction => {
     elementAction.addEventListener('click', function (event) {
-        var element = event.target.closest('.' + locators.init),
+        let element = event.target.closest('.' + locators.init),
             elementData = element.dataset,
             network = elementData.social,
             params = getParamsByNetwork(getFilledElement(element, elementData), network);
@@ -65,7 +64,7 @@ const bindListener = elementAction => {
 };
 
 const getFilledElement = (element, elementData) => {
-    var socialTarget = elementData.target,
+    let socialTarget = elementData.target,
         targetById = document.getElementById(socialTarget),
         target = !!targetById ? targetById : document.querySelector('.' + socialTarget);
     return !!target ? target : element;
