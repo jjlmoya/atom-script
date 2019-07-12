@@ -7,4 +7,4 @@ import './social/index';
 import './utils/exitIntent';
 import './image/replace';
 import './heading/anchor';
-
+import './tooltip/index';

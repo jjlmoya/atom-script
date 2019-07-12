@@ -22,7 +22,6 @@ const stringToSlug = str => {
     return str;
 };
 
-
 const searchToObject = () => {
     let pairs = window.location.search.substring(1).split("&"),
         obj = {},
