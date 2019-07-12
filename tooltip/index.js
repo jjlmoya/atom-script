@@ -65,7 +65,6 @@ const triggerTooltip = (event) => {
 const bindEvents = (elements) => {
     elements.forEach((el) => {
         const settings = getSettings(el);
-        console.log(settings);
         if (settings.mode === 'click') {
             el.addEventListener('click', triggerTooltip);
         }
