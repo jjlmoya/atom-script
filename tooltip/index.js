@@ -1,67 +1,93 @@
+import {tooltipTemplates} from "./templates";
+
 const locators = {
     trigger: '.bs_tooltip',
     tooltip: '.tooltip',
     close: '.tooltip__close'
-}
+};
 
-const renderCloseElement = isFixed => isFixed ? '<a class="tooltip__close">X</a>' : ''
+const getTooltipTemplate = (content, template) => {
+    try {
 
-const openTooltip = (content, isFixed) => {
-    const tooltip = `
-        <div class="tooltip l-position--fixed">
-            ${renderCloseElement(isFixed)}
-            <div class="tooltip__inner">${content}</div>
-        </div>
-    `
-    document.body.insertAdjacentHTML('beforeend', tooltip)
-}
+        return tooltipTemplates[template ? template : 'default'](content)
+    } catch (e) {
+        console.error(`Error: Template "${template}" not found`)
+        return tooltipTemplates['default'](content);
+    }
+};
+
+const openTooltip = (settings) => {
+    document.body.insertAdjacentHTML('beforeend', getTooltipTemplate(settings.content, settings.template));
+};
 
 const closeTooltip = (tooltip) => {
-    tooltip.remove()
-}
+    if (tooltip) {
+        tooltip.remove();
+    }
+};
 
 const onClickBody = event => {
-    const tooltip = document.querySelector(locators.tooltip)
-    const isClickInside = event.target.closest(locators.tooltip)
-    const clickedElement = event.target
-    const triggerElement = document.querySelector(locators.trigger)
-    const closeElement = document.querySelector(locators.close)
+    const tooltip = document.querySelector(locators.tooltip),
+        isClickInside = event.target.closest(locators.tooltip),
+        clickedElement = event.target,
+        triggerElement = document.querySelector(locators.trigger),
+        closeElement = document.querySelector(locators.close);
 
+    console.log({
+        tooltip: tooltip,
+        isClickInside: isClickInside,
+        clickedElement: clickedElement,
+        triggerElement: triggerElement,
+        closeElement: closeElement
+    });
     if ((tooltip && !isClickInside && clickedElement !== triggerElement) || clickedElement === closeElement) {
-        closeTooltip(tooltip)
-        document.removeEventListener('click', onClickBody)
+        closeTooltip(tooltip);
+        document.removeEventListener('click', onClickBody);
     }
-}
+};
+
+const getSettings = el => el.dataset;
+
+const onMouseOut = event => {
+    closeTooltip(document.querySelector(locators.tooltip));
+    event.target.removeEventListener('mouseout', onMouseOut);
+};
+const triggerTooltip = (event) => {
+    const tooltip = document.querySelector(locators.tooltip),
+        isClickEvent = event.type === 'click',
+        isHoverEvent = event.type === 'mouseover',
+        target = event.target;
+
+    closeTooltip(tooltip);
+    openTooltip(getSettings(target));
+
+    if (isClickEvent) {
+        document.addEventListener('click', onClickBody);
+    }
+    if (isHoverEvent) {
+        target.addEventListener('mouseout', function () {
+            closeTooltip(document.querySelector(locators.tooltip));
+        });
+    }
+
+};
+
+
 const bindEvents = (elements) => {
     elements.forEach((el) => {
-        const content = el.dataset.content;
-        const isFixed = el.dataset.fixed;
-
-        if (isFixed) {
-            el.addEventListener('click', function () {
-                const tooltip = document.querySelector(locators.tooltip)
-                if (!tooltip) openTooltip(content, isFixed)
-                if (tooltip) closeTooltip(tooltip)
-                document.addEventListener('click', onClickBody)
-            })
-        } else {
-            el.addEventListener('mouseover', function () {
-                const tooltip = document.querySelector(locators.tooltip)
-                const content = el.dataset.content
-                const isFixed = el.dataset.fixed
-                if (!tooltip) openTooltip(content, isFixed)
-            })
-
-            el.addEventListener('mouseout', function () {
-                const tooltip = document.querySelector(locators.tooltip)
-                if (tooltip) closeTooltip(tooltip)
-            })
+        const settings = getSettings(el);
+        console.log(settings);
+        if (settings.mode === 'click') {
+            el.addEventListener('click', triggerTooltip);
         }
-    })
-}
+        if (settings.mode === 'hover') {
+            el.addEventListener('mouseover', triggerTooltip);
+        }
+    });
+};
 
 const init = () => {
-    bindEvents([...document.querySelectorAll(locators.trigger)])
-}
+    bindEvents([...document.querySelectorAll(locators.trigger)]);
+};
 
-export default init()
+export default init();
