@@ -2,8 +2,7 @@ import {tooltipTemplates} from "./templates";
 
 const locators = {
     trigger: '.bs_tooltip',
-    tooltip: '.tooltip',
-    close: '.tooltip__close'
+    tooltip: '.tooltip'
 };
 
 const getTooltipTemplate = (content, template) => {
@@ -30,17 +29,8 @@ const onClickBody = event => {
     const tooltip = document.querySelector(locators.tooltip),
         isClickInside = event.target.closest(locators.tooltip),
         clickedElement = event.target,
-        triggerElement = document.querySelector(locators.trigger),
-        closeElement = document.querySelector(locators.close);
-
-    console.log({
-        tooltip: tooltip,
-        isClickInside: isClickInside,
-        clickedElement: clickedElement,
-        triggerElement: triggerElement,
-        closeElement: closeElement
-    });
-    if ((tooltip && !isClickInside && clickedElement !== triggerElement) || clickedElement === closeElement) {
+        triggerElement = document.querySelector(locators.trigger);
+    if (tooltip && !isClickInside && clickedElement !== triggerElement) {
         closeTooltip(tooltip);
         document.removeEventListener('click', onClickBody);
     }
@@ -72,7 +62,6 @@ const triggerTooltip = (event) => {
 
 };
 
-
 const bindEvents = (elements) => {
     elements.forEach((el) => {
         const settings = getSettings(el);
@@ -86,8 +75,6 @@ const bindEvents = (elements) => {
     });
 };
 
-const init = () => {
+(() => {
     bindEvents([...document.querySelectorAll(locators.trigger)]);
-};
-
-export default init();
+})();
