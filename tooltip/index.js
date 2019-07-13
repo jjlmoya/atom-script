@@ -2,21 +2,20 @@ import {tooltipTemplates} from "./templates";
 
 const locators = {
     trigger: '.bs_tooltip',
-    tooltip: '.tooltip'
+    tooltip: '.bs_tooltip_content'
 };
 
 const getTooltipTemplate = (content, template) => {
     try {
-
-        return tooltipTemplates[template ? template : 'default'](content)
+        return tooltipTemplates[template ? template : 'default'](content);
     } catch (e) {
-        console.error(`Error: Template "${template}" not found`)
+        console.error(`Error: Template "${template}" not found`);
         return tooltipTemplates['default'](content);
     }
 };
 
-const openTooltip = (settings) => {
-    document.body.insertAdjacentHTML('beforeend', getTooltipTemplate(settings.content, settings.template));
+const openTooltip = (settings, target) => {
+    target.insertAdjacentHTML('beforeend', getTooltipTemplate(settings.content, settings.template));
 };
 
 const closeTooltip = (tooltip) => {
@@ -49,7 +48,7 @@ const triggerTooltip = (event) => {
         target = event.target;
 
     closeTooltip(tooltip);
-    openTooltip(getSettings(target));
+    openTooltip(getSettings(target), event.target);
 
     if (isClickEvent) {
         document.addEventListener('click', onClickBody);

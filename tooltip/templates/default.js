@@ -1,5 +1,6 @@
-export let DefaultTemplate = content =>  `
-        <div class="tooltip l-position--fixed">
-            <div class="tooltip__inner">${content}</div>
+export let DefaultTemplate = content => `
+        <div class="a-tooltip a-tooltip--top bs_tooltip_content">
+            ${content}
         </div>
-    `;
+`;
+
