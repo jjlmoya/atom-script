@@ -8,3 +8,4 @@ import './utils/exitIntent';
 import './image/replace';
 import './heading/anchor';
 import './tooltip/index';
+import './splash/index';
