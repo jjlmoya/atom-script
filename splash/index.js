@@ -10,5 +10,5 @@ const removeSplashScreen = () => {
 };
 
 (() => {
-    setTimeout(removeSplashScreen, 200);
+    setTimeout(removeSplashScreen, 10);
 })();
