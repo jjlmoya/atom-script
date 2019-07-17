@@ -36,11 +36,11 @@ module.exports = {
     },
     button: function (button, actionClass) {
         return `
-            <div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-center ${actionClass} a-pad ${button.brand}">
-                    <button class="a-button-svg--square a-svg a-pad a-svg--m a-svg--secondary a-border a-border--secondary a-border--hover--primary a-border--smooth">
+            <div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-start ${actionClass} ${button.brand} a-pad--bottom">
+                    <button class="a-button a-button--mono-0 a-button-svg--square a-svg--secondary a-pad a-svg--m a-border a-border--secondary a-border--hover--primary a-border--smooth">
                         ${button.svg}
                     </button>   
-                <div class="a-text a-text--link a-text--center a-pad-5">${button.cta}</div>
+                <div class="a-text a-text--link a-text--secondary a-text--center a-pad-5">${button.cta}</div>
             </div>`;
     }
 };
