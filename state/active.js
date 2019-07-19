@@ -4,54 +4,46 @@ const locators = {
     eventClick: 'click'
 };
 
-
-const bindToggleElement = (element, component, state, closeClass) => {
-    if (element.length > 0) {
-        element[0].addEventListener(locators.eventClick, function (e) {
-            if (state || !closeClass || e.target.classList.contains(closeClass)) {
-                document.body.classList.remove('overflow-blocked');
-                component.classList.toggle(locators.activeClass, state);
-            }
+const bindToggleElement = (component, state, stateLocator) => {
+    [...document.querySelectorAll(stateLocator)].forEach((element) => {
+        element.addEventListener(locators.eventClick, (e) => {
+            component.classList.toggle(locators.activeClass, state);
         });
-    }
+    });
 };
 
-const bindClose = (closeElement, component) => {
-    if (closeElement) {
-        bindToggleElement(document.getElementsByClassName(closeElement), component, false, closeElement);
-    }
+const bindClose = (closeTrigger, element) => {
+    bindToggleElement(element, false, closeTrigger);
 };
 
-const bindActive = (activeElement, component) => {
-    if (activeElement) {
-        bindToggleElement(document.getElementsByClassName(activeElement), component, true);
-    }
+const bindActive = (activeTrigger, element) => {
+    bindToggleElement(element, true, activeTrigger);
 };
 
-const addActiveClass = (component) => {
-    component.classList.add(locators.activeClass);
+const addActiveClass = (element) => {
+    element.classList.add(locators.activeClass);
 };
 
-const bindDelay = (timeout, component) => {
+const bindDelay = (timeout, element) => {
     if (timeout) {
         setTimeout(function () {
-            addActiveClass(component);
+            addActiveClass(element);
         }, timeout);
     }
 };
 
-const extractData = dataset => {
+const extractData = ({close, delay, active}) => {
     return {
-        close: dataset.close,
-        delay: dataset.delay,
-        active: dataset.active
+        close: close,
+        delay: delay,
+        active: active
     };
 };
 
-const bindEvents = (settings, component) => {
-    bindClose(settings.close, component);
-    bindDelay(settings.delay, component);
-    bindActive(settings.active, component);
+const bindEvents = (settings, element) => {
+    bindClose(settings.close, element);
+    bindDelay(settings.delay, element);
+    bindActive(settings.active, element);
 };
 
 (() => {
