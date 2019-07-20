@@ -123,6 +123,51 @@
                 onFilter(element, parentLocator);
             });
         },
+
+        getCategoriesByOffer = offer => {
+            let categories = [];
+
+            if (offer.beach || offer.allin || offer.spa || offer.seapool) {
+                categories.push('relax');
+            }
+            if (offer.thematic) {
+                categories.push('party');
+            }
+            if (offer.gym) {
+                categories.push('sport');
+            }
+            if (offer.animation || offer.kidpool) {
+                categories.push('family');
+            }
+            if (offer.eco) {
+                categories.push('eco');
+            }
+            if (offer.petfriendly) {
+                categories.push('pet');
+            }
+            if (offer.onlyadults) {
+                categories.push('adults');
+            }
+            return categories;
+        },
+
+        getSubCategoriesByOffer = offer => {
+            let subcategories = [];
+            return subcategories;
+        },
+        getFormatOffers = offers => {
+            return offers.map((offer) => {
+                let categories = getCategoriesByOffer(offer);
+                let subcategories = getSubCategoriesByOffer(offer);
+
+                return {
+                    name: offer.name,
+                    bhc: offer.bhc,
+                    categories: categories,
+                    subcategories: subcategories
+                }
+            });
+        },
         init = function () {
             var offersElements = document.querySelectorAll(locators.offers);
             if (offersElements && offersElements.length > 0) {
