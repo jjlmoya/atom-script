@@ -1,7 +1,5 @@
-module.exports = {
-    offers: function (offer, isDouble) {
-        return `
-        <div data-tags="" class="gel-layout__item gel-1/1 gel-1/2@m ${isDouble ? 'gel-2/4@l' : 'gel-1/4@l'}">
+export const Offers = (offer, isDouble) =>
+    `<div data-tags="" class="gel-layout__item gel-1/1 gel-1/2@m ${isDouble ? 'gel-2/4@l' : 'gel-1/4@l'}">
             <article class="m-offer m-offer--theme-2 a-zoom-image ${isDouble ? 'm-offer--theme-2-double' : ''}">
                <div class="m-offer__picture-wrap">
                   <a class="m-offer__picture-link m-hero m-hero--top-left" href="${offer.link}">
@@ -33,14 +31,11 @@ module.exports = {
                </div>
             </article>
         </div>`;
-    },
-    button: function (button, actionClass) {
-        return `
-            <div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-start ${actionClass} ${button.brand} a-pad--bottom">
-                    <button class="a-button a-button--mono-0 a-button-svg--square a-svg--secondary a-pad a-svg--m a-border a-border--secondary a-border--hover--primary a-border--smooth">
-                        ${button.svg}
-                    </button>   
-                <div class="a-text a-text--link a-text--secondary a-text--center a-pad-5">${button.cta}</div>
-            </div>`;
-    }
-};
+
+export const Button = (button, actionClass) =>
+    `<div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-start ${actionClass} ${button.brand} a-pad--bottom">
+            <button class="a-button a-button--mono-0 a-button-svg--square a-svg--secondary a-pad a-svg--m a-border a-border--secondary a-border--hover--primary a-border--smooth">
+                ${button.svg}
+            </button>   
+        <div class="a-text a-text--link a-text--secondary a-text--center a-pad-5">${button.cta}</div>
+    </div>`;

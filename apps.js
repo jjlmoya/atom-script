@@ -9,10 +9,3 @@ import './image/replace';
 import './heading/anchor';
 import './tooltip/index';
 import './splash/index';
-
-
-window.BS = {
-    Service: {
-        Step: require('./service/step')
-    }
-};

@@ -1,4 +1,4 @@
-module.exports = {
+export const icons = {
     cultural: `
      <svg xmlns="http://www.w3.org/2000/svg"
          id="a-svg__cultural"

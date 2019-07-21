@@ -1,41 +1,42 @@
-module.exports = {
-    locators: {
-        trigger: '.bs_step',
-        routerClass: 'is-active',
-    },
-    model: {
-        elements: [],
-        activeIndex: -1,
-    },
-    getElements: function () {
-        this.model.elements = document.querySelectorAll(this.locators.trigger);
-        for (var i = 0; i < this.model.elements.length; i++) {
-            var elementIterator = this.model.elements[i];
-            if (elementIterator.classList.contains(this.locators.routerClass)) {
-                elementIterator.classList.remove(this.locators.routerClass);
-                this.model.activeIndex = i;
-            }
-        }
-    },
-    activeElement: function (element) {
-        element.classList.add(this.locators.routerClass);
-    },
-    showNextElement: function () {
-        var elements = this.model.elements;
-        try {
-            this.model.activeIndex++;
-            this.activeElement(elements[this.model.activeIndex]);
-        } catch (e) {
-            this.model.activeIndex--;
-            this.activeElement(elements[this.model.activeIndex]);
-        }
+const locators = {
+    trigger: '.bs_step',
+    routerClass: 'is-active',
+};
 
-    },
-    next: function () {
-        this.getElements();
-        if (this.model.elements.length > 0) {
-            this.showNextElement();
-        }
+const model = {
+    elements: [],
+    activeIndex: -1,
+};
 
+const getElements = () => {
+    model.elements = document.querySelectorAll(locators.trigger);
+    for (var i = 0; i < model.elements.length; i++) {
+        var elementIterator = model.elements[i];
+        if (elementIterator.classList.contains(locators.routerClass)) {
+            elementIterator.classList.remove(locators.routerClass);
+            model.activeIndex = i;
+        }
+    }
+};
+
+const activeElement = element => {
+    element.classList.add(locators.routerClass);
+};
+
+const showNextElement = () => {
+    var elements = model.elements;
+    try {
+        model.activeIndex++;
+        activeElement(elements[model.activeIndex]);
+    } catch (e) {
+        model.activeIndex--;
+        activeElement(elements[model.activeIndex]);
+    }
+};
+
+export const next = () => {
+    getElements();
+    if (model.elements.length > 0) {
+        showNextElement();
     }
 };

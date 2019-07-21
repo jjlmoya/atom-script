@@ -1,180 +1,181 @@
-(function (PROJECT) {
-    var locators = {
-            filter: 'bs_step_filter',
-            filterSubcategory: 'bs_step_filter_subcategory',
-            categoryContainer: '.bs_step_category',
-            subCategory: '.bs_step_subcategory',
-            title: '.bs_step_title',
-            offers: '.bs_step_offers',
-            content: '.bs_step_content',
-            hideClass: 'u-hide'
-        },
-        html = require(`./project/${PROJECT}/html`),
-        data = {
-            categories: require(`./project/${PROJECT}/category`),
-            subcategories: require(`./project/${PROJECT}/subcategory`)
-        },
-        model = {
-            activeCategory: '',
-            activeSubcategory: '',
-            offers: []
-        },
-        renderButton = function (button, isSubcategory) {
-            return html.button(button, isSubcategory ? locators.filterSubcategory : locators.filter);
-        },
+import {Offers, Button} from './project/mv/html';
+import {GetCategories, GetSubcategories} from './project/mv/services';
+import {next} from './service/step';
 
-        getSubCategoriesByCategory = function (category) {
-            return data.subcategories.filter(function (sub) {
-                return sub.categories.join().indexOf(category) > -1;
-            });
-        },
-        renderButtons = function (isSubcategory) {
-            var buttons = isSubcategory ? getSubCategoriesByCategory(model.activeCategory) : data.categories;
-            var html = buttons.map(function (category) {
-                    return renderButton(category, isSubcategory);
-                }).join(''),
-                elementLocator = isSubcategory ? locators.subCategory : locators.categoryContainer;
-            document.querySelector(elementLocator).innerHTML = html;
-        },
-        getCategoryName = function (name) {
-            try {
-                var categories = Object.assign({}, data.categories, data.subcategories);
-                return categories.filter({id: name}).concat(undefined).shift().cta;
-            } catch (e) {
-                return "";
-            }
-        },
-        renderTitle = function () {
-            var title = `Las mejoras Ofertas <span class="a-text--brand--secondary">${model.activeCategory ? 'de ' : ''} ${getCategoryName(model.activeCategory)} ${getCategoryName(model.activeSubcategory)}</span>:`;
-            document.querySelector(locators.title).innerHTML = title;
-        },
-        renderOffer = function (offer, position) {
-            return html.offers(offer, (position + 1) % 4 === 1);
-        },
-        getOffers = function (callback) {
-            /*Call API fo full list*/
-            model.offers = require(`./project/${PROJECT}/products`);
-            callback();
-        },
-        renderOffers = function (filteredOffers) {
-            var html = '',
-                offers = filteredOffers ? filteredOffers : model.offers;
-            for (var i = 0; i < offers.length; i++) {
-                html += renderOffer(offers[i], i);
-            }
-            document.querySelector(locators.content).innerHTML = html;
-        },
-        showOfferContainers = function () {
-            if (model.offers.length > 0) {
-                document.querySelector(locators.offers).classList.remove(locators.hideClass);
-            } else {
-                document.querySelector(locators.offers).classList.add(locators.hideClass);
-            }
-        },
-        filterOffersByTag = function (tag, filterOffers) {
-            var offers = filterOffers ? filterOffers : model.offers;
-            return offers.filter(function (offer) {
-                return offer.tags.join('').indexOf(tag) > -1;
-            });
-        },
+const locators = {
+    filter: 'bs_step_filter',
+    filterSubcategory: 'bs_step_filter_subcategory',
+    categoryContainer: '.bs_step_category',
+    subCategory: '.bs_step_subcategory',
+    title: '.bs_step_title',
+    offers: '.bs_step_offers',
+    content: '.bs_step_content',
+    hideClass: 'u-hide'
+};
 
-        renderCategoryPage = function () {
-            renderOffers();
-            renderButtons();
-            renderTitle();
-            bindFilters('.' + locators.filter);
-            showOfferContainers();
-            BS.Service.Step.next();
-        },
-        renderSubCategoryPage = function () {
-            var filteredOffers = filterOffersByTag(model.activeCategory);
-            renderOffers(filteredOffers);
-            renderButtons(true);
-            renderTitle();
-            bindFilters('.' + locators.filterSubcategory);
-            showOfferContainers();
-            BS.Service.Step.next();
+let categories = [];
+let subcategories = [];
+const model = {
+    activeCategory: '',
+    activeSubcategory: '',
+    offers: []
+};
 
-        },
-        renderProductPage = function () {
-            var filteredOffers = filterOffersByTag(model.activeSubcategory, filterOffersByTag(model.activeCategory));
-            renderOffers(filteredOffers);
-            renderTitle();
-            showOfferContainers();
-            BS.Service.Step.next();
-        },
-        addFilter = function (element, locator) {
-            var tag = element.dataset.tag;
-            if (locator === locator.filterSubcategory) {
-                model.activeSubcategory = tag;
-                renderProductPage();
-            } else {
-                model.activeCategory = tag;
-                renderSubCategoryPage();
-            }
-        },
-        onFilter = function (element, parentLocator) {
-            element.addEventListener('mousedown', function (e) {
-                addFilter(e.target.closest(parentLocator), parentLocator);
-            });
-        },
-        bindFilters = function (parentLocator) {
-            document.querySelectorAll(parentLocator).forEach(function (element) {
-                onFilter(element, parentLocator);
-            });
-        },
+const renderButton = (button, isSubcategory) => Button(button, isSubcategory ? locators.filterSubcategory : locators.filter);
 
-        getCategoriesByOffer = offer => {
-            let categories = [];
+const getSubCategoriesByCategory = category => subcategories.filter(sub => sub.categories.join().indexOf(category) > -1);
 
-            if (offer.beach || offer.allin || offer.spa || offer.seapool) {
-                categories.push('relax');
-            }
-            if (offer.thematic) {
-                categories.push('party');
-            }
-            if (offer.gym) {
-                categories.push('sport');
-            }
-            if (offer.animation || offer.kidpool) {
-                categories.push('family');
-            }
-            if (offer.eco) {
-                categories.push('eco');
-            }
-            if (offer.petfriendly) {
-                categories.push('pet');
-            }
-            if (offer.onlyadults) {
-                categories.push('adults');
-            }
-            return categories;
-        },
+const renderButtons = isSubcategory => {
+    let buttons = isSubcategory ? getSubCategoriesByCategory(model.activeCategory) : categories;
+    let html = buttons.map(function (category) {
+            return renderButton(category, isSubcategosry);
+        }).join(''),
+        elementLocator = isSubcategory ? locators.subCategory : locators.categoryContainer;
+    document.querySelector(elementLocator).innerHTML = html;
+};
 
-        getSubCategoriesByOffer = offer => {
-            let subcategories = [];
-            return subcategories;
-        },
-        getFormatOffers = offers => {
-            return offers.map((offer) => {
-                let categories = getCategoriesByOffer(offer);
-                let subcategories = getSubCategoriesByOffer(offer);
+const getCategoryName = name => {
+    try {
+        let mergeCategories = Object.assign({}, categories, subcategories);
+        return mergeCategories.filter({id: name}).concat(undefined).shift().cta;
+    } catch (e) {
+        return "";
+    }
+};
 
-                return {
-                    name: offer.name,
-                    bhc: offer.bhc,
-                    categories: categories,
-                    subcategories: subcategories
-                }
-            });
-        },
-        init = function () {
-            var offersElements = document.querySelectorAll(locators.offers);
-            if (offersElements && offersElements.length > 0) {
-                getOffers(function () {
-                    renderCategoryPage();
-                });
-            }
-        };
-    setTimeout(init, 300);
-})('mv');
+const renderTitle = () => {
+    let title = `Las mejoras Ofertas <span class="a-text--brand--secondary">${model.activeCategory ? 'de ' : ''} ${getCategoryName(model.activeCategory)} ${getCategoryName(model.activeSubcategory)}</span>:`;
+    document.querySelector(locators.title).innerHTML = title;
+};
+
+const renderOffer = (offer, position) => Offers(offer, (position + 1) % 4 === 1);
+
+const getOffers = (callback) => {
+    
+    callback([]);
+};
+
+const renderOfferList = (offers) =>
+    offers.map((offer, index) => {
+        renderOffer(offer, index);
+    }).join(' ');
+
+const renderOffers = (filteredOffers) => {
+    document.querySelector(locators.content).innerHTML = renderOfferList(filteredOffers ? filteredOffers : model.offers);
+};
+
+const showOfferContainers = () => {
+    if (model.offers.length > 0) {
+        document.querySelector(locators.offers).classList.remove(locators.hideClass);
+    } else {
+        document.querySelector(locators.offers).classList.add(locators.hideClass);
+    }
+};
+
+const filterOffersByTag = (tag, filterOffers) => {
+    let offers = filterOffers ? filterOffers : model.offers;
+    return offers.filter((offer) => offer.tags.join('').indexOf(tag) > -1);
+};
+
+const renderCategoryPage = () => {
+    renderOffers();
+    renderButtons();
+    renderTitle();
+    bindFilters('.' + locators.filter);
+    showOfferContainers();
+    next();
+};
+
+const renderSubCategoryPage = () => {
+    var filteredOffers = filterOffersByTag(model.activeCategory);
+    renderOffers(filteredOffers);
+    renderButtons(true);
+    renderTitle();
+    bindFilters('.' + locators.filterSubcategory);
+    showOfferContainers();
+    next();
+};
+
+const renderProductPage = () => {
+    var filteredOffers = filterOffersByTag(model.activeSubcategory, filterOffersByTag(model.activeCategory));
+    renderOffers(filteredOffers);
+    renderTitle();
+    showOfferContainers();
+    next();
+};
+
+const addFilter = (element, locator) => {
+    var tag = element.dataset.tag;
+    if (locator === locator.filterSubcategory) {
+        model.activeSubcategory = tag;
+        renderProductPage();
+    } else {
+        model.activeCategory = tag;
+        renderSubCategoryPage();
+    }
+};
+
+const onFilter = (element, parentLocator) => {
+    element.addEventListener('mousedown', (e) => {
+        addFilter(e.target.closest(parentLocator), parentLocator);
+    });
+};
+
+const bindFilters = parentLocator => {
+    document.querySelectorAll(parentLocator).forEach(function (element) {
+        onFilter(element, parentLocator);
+    });
+};
+
+const getCategoriesByOffer = (offer) => {
+    let categories = [];
+
+    if (offer.beach || offer.allin || offer.spa || offer.seapool) {
+        categories.push('relax');
+    }
+    if (offer.thematic) {
+        categories.push('party');
+    }
+    if (offer.gym) {
+        categories.push('sport');
+    }
+    if (offer.animation || offer.kidpool) {
+        categories.push('family');
+    }
+    if (offer.eco) {
+        categories.push('eco');
+    }
+    if (offer.petfriendly) {
+        categories.push('pet');
+    }
+    if (offer.onlyadults) {
+        categories.push('adults');
+    }
+    return categories;
+};
+
+const getSubCategoriesByOffer = offer => [];
+
+const getFormatOffers = offers => offers.map((offer) => {
+    let categories = getCategoriesByOffer(offer);
+    let subcategories = getSubCategoriesByOffer(offer);
+
+    return {
+        name: offer.name,
+        bhc: offer.bhc,
+        categories: categories,
+        subcategories: subcategories
+    };
+});
+
+(() => {
+    var offersElements = document.querySelectorAll(locators.offers);
+    if (offersElements && offersElements.length > 0) {
+        getOffers(function (offers) {
+            model.offers = offers;
+            categories = getCategoriesByOffer(offers);
+            subcategories = getSubCategoriesByCategory(offers);
+            renderCategoryPage();
+        });
+    }
+})();

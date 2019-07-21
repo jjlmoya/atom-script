@@ -1,5 +1,6 @@
-var icons = require('./icon');
-module.exports = [
+import {icons} from './icon';
+
+const categories = [
     {
         id: 'relax',
         cta: 'Relax',
@@ -29,3 +30,17 @@ module.exports = [
         svg: icons.cultural,
         brand: '',
     }];
+
+const subcategories = [
+    {
+        id: 'ski',
+        cta: 'Esquí',
+        svg: icons.ski,
+        brand: '',
+        categories: ['sports']
+    }
+];
+
+export const GetCategories = () => categories;
+
+export const GetSubcategories = () => subcategories;
