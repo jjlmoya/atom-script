@@ -45,9 +45,12 @@ const renderOffers = (filteredOffers) => {
 };
 
 const renderPage = () => {
-    document.querySelector('.og-banner-screen').classList.remove('is-active');
+    let splash = document.querySelector('.og-banner-screen');
+    if (splash) {
+        splash.classList.remove('is-active');
     renderOffers();
     renderButtons();
+    }
 };
 
 const getCategoriesByOffer = (offer) => {

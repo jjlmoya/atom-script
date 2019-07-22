@@ -1,3 +1,5 @@
+import {ShowOverflowLayer, HideOverflowLayer} from "../utils/layout";
+
 const locators = {
     trigger: '.bs_state',
     activeClass: 'is-active',
@@ -8,6 +10,13 @@ const bindToggleElement = (component, state, stateLocator) => {
     [...document.querySelectorAll(stateLocator)].forEach((element) => {
         element.addEventListener(locators.eventClick, (e) => {
             component.classList.toggle(locators.activeClass, state);
+            if (component.dataset.block) {
+                if (state) {
+                    ShowOverflowLayer(component);
+                } else {
+                    HideOverflowLayer();
+                }
+            }
         });
     });
 };
@@ -32,11 +41,12 @@ const bindDelay = (timeout, element) => {
     }
 };
 
-const extractData = ({close, delay, active}) => {
+const extractData = ({close, delay, active, block}) => {
     return {
         close: close,
         delay: delay,
-        active: active
+        active: active,
+        block: block
     };
 };
 
