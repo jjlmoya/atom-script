@@ -1,5 +1,5 @@
 import {Offers, Button} from './project/mv/html';
-import {GetCategories, GetSubcategories} from './project/mv/services';
+import {GetCategories, GetSubcategories, GetOffers} from './project/mv/services';
 import {next} from './service/step';
 
 const locators = {
@@ -15,10 +15,10 @@ const locators = {
 
 let categories = [];
 let subcategories = [];
+let offers = [];
 const model = {
     activeCategory: '',
     activeSubcategory: '',
-    offers: []
 };
 
 const renderButton = (button, isSubcategory) => Button(button, isSubcategory ? locators.filterSubcategory : locators.filter);
@@ -27,9 +27,7 @@ const getSubCategoriesByCategory = category => subcategories.filter(sub => sub.c
 
 const renderButtons = isSubcategory => {
     let buttons = isSubcategory ? getSubCategoriesByCategory(model.activeCategory) : categories;
-    let html = buttons.map(function (category) {
-            return renderButton(category, isSubcategosry);
-        }).join(''),
+    let html = buttons.map(category => renderButton(category, isSubcategory)).join(''),
         elementLocator = isSubcategory ? locators.subCategory : locators.categoryContainer;
     document.querySelector(elementLocator).innerHTML = html;
 };
@@ -50,22 +48,17 @@ const renderTitle = () => {
 
 const renderOffer = (offer, position) => Offers(offer, (position + 1) % 4 === 1);
 
-const getOffers = (callback) => {
-    
-    callback([]);
-};
-
 const renderOfferList = (offers) =>
     offers.map((offer, index) => {
         renderOffer(offer, index);
     }).join(' ');
 
 const renderOffers = (filteredOffers) => {
-    document.querySelector(locators.content).innerHTML = renderOfferList(filteredOffers ? filteredOffers : model.offers);
+    document.querySelector(locators.content).innerHTML = renderOfferList(filteredOffers ? filteredOffers : offers);
 };
 
 const showOfferContainers = () => {
-    if (model.offers.length > 0) {
+    if (offers.length > 0) {
         document.querySelector(locators.offers).classList.remove(locators.hideClass);
     } else {
         document.querySelector(locators.offers).classList.add(locators.hideClass);
@@ -73,8 +66,8 @@ const showOfferContainers = () => {
 };
 
 const filterOffersByTag = (tag, filterOffers) => {
-    let offers = filterOffers ? filterOffers : model.offers;
-    return offers.filter((offer) => offer.tags.join('').indexOf(tag) > -1);
+    let newOffers = filterOffers || offers;
+    return newOffers.filter((offer) => offer.tags.join('').indexOf(tag) > -1);
 };
 
 const renderCategoryPage = () => {
@@ -168,14 +161,14 @@ const getFormatOffers = offers => offers.map((offer) => {
     };
 });
 
-(() => {
-    var offersElements = document.querySelectorAll(locators.offers);
+const init = async () => {
+    let offersElements = document.querySelectorAll(locators.offers);
     if (offersElements && offersElements.length > 0) {
-        getOffers(function (offers) {
-            model.offers = offers;
-            categories = getCategoriesByOffer(offers);
-            subcategories = getSubCategoriesByCategory(offers);
-            renderCategoryPage();
-        });
+        offers = await getFormatOffers(GetOffers());
+        categories = await GetCategories(offers);
+        subcategories = await GetSubcategories(categories);
+        console.log(offers);
+        renderCategoryPage();
     }
-})();
+};
+init();
