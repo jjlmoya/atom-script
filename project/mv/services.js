@@ -1,6 +1,13 @@
 import {icons} from './icon';
 
-const filters = [];
+const filters = [
+    {
+        id: 'work',
+        cta: 'ABC',
+        svg: icons.work,
+        brand: '',
+    }
+];
 const categories = [
     {
         id: 'relax',
@@ -11,24 +18,6 @@ const categories = [
         id: 'work',
         cta: 'Trabajo',
         svg: icons.work,
-        brand: '',
-    },
-    {
-        id: 'sport',
-        cta: 'Deporte',
-        svg: icons.sports,
-        brand: '',
-    },
-    {
-        id: 'party',
-        cta: 'Ocio',
-        svg: icons.party,
-        brand: '',
-    },
-    {
-        tag: 'culture',
-        cta: 'Cultural',
-        svg: icons.cultural,
         brand: '',
     }];
 
@@ -94,6 +83,6 @@ export const GetCategories = () => categories;
 
 export const GetSubcategories = () => subcategories;
 
-export const GetSubcategories = () => filters;
+export const GetFilters = () => filters;
 
 export const GetOffers = () => offers;

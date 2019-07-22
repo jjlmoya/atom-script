@@ -32,8 +32,8 @@ export const Offers = (offer, isDouble) =>
             </article>
         </div>`;
 
-export const Button = (button, actionClass) =>
-    `<div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-start ${actionClass} ${button.brand} a-pad--bottom">
+export const Button = (button) =>
+    `<div data-tag="${button.id}" class="ml-button-pill l-flex l-flex--direction-column l-flex--justify-start ${button.brand} a-pad--bottom a-mar">
             <button class="a-button a-button--mono-0 a-button-svg--square a-svg--secondary a-pad a-svg--m a-border a-border--secondary a-border--hover--primary a-border--smooth">
                 ${button.svg}
             </button>   
