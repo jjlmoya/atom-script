@@ -1,5 +1,5 @@
 import {Offers, Button} from './project/mv/html';
-import {GetCategories, GetSubcategories, GetOffers} from './project/mv/services';
+import {GetCategories, GetSubcategories, GetOffers, GetFilters} from './project/mv/services';
 import {next} from './service/step';
 
 const locators = {
@@ -15,6 +15,7 @@ const locators = {
 
 let categories = [];
 let subcategories = [];
+let filters = [];
 let offers = [];
 const model = {
     activeCategory: '',
@@ -167,7 +168,7 @@ const init = async () => {
         offers = await getFormatOffers(GetOffers());
         categories = await GetCategories(offers);
         subcategories = await GetSubcategories(categories);
-        console.log(offers);
+        filters = await GetFilters();
         renderCategoryPage();
     }
 };

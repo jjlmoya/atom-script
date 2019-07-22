@@ -1,5 +1,6 @@
 import {icons} from './icon';
 
+const filters = [];
 const categories = [
     {
         id: 'relax',
@@ -92,5 +93,7 @@ const offers = [
 export const GetCategories = () => categories;
 
 export const GetSubcategories = () => subcategories;
+
+export const GetSubcategories = () => filters;
 
 export const GetOffers = () => offers;
