@@ -4,7 +4,6 @@ const locators = {
     activeClass: 'is-active'
 };
 
-
 const isOverflowLayerEnable = () => !!document.querySelector('.' + locators.layer);
 
 const getLayer = () => {

@@ -17,6 +17,10 @@ const onScroll = (slider, slideClass) => {
     }
 };
 
+const scrollToElement = (slider, index) => {
+    console.log(index);
+};
+
 const bindScrollEvents = () => {
     let sliders = document.querySelectorAll(locators.content),
         slideClass = locators.slide;
@@ -25,6 +29,22 @@ const bindScrollEvents = () => {
             onScroll(e.target, slideClass);
         });
         onScroll(slider, slideClass);
+    });
+};
+
+const onClickArrow = ({target}) => {
+    let slider = target.closest(locators.content);
+    let slides = slider.querySelectorAll(locators.slide);
+    let direction = target.dataset.right ? 2 : 0;
+
+    scrollToElement(slider, (getActiveSlider(slides, slider) + direction));
+
+};
+
+const bindArrowsEvent = () => {
+    let sliders = document.querySelectorAll(locators.content);
+    sliders.forEach(function (slider) {
+        slider.addEventListener('click', onClickArrow);
     });
 };
 
@@ -52,4 +72,5 @@ const getActiveSlider = (slides, parent) => {
 
 (() => {
     bindScrollEvents(locators.trigger);
+    bindArrowsEvent();
 })();
