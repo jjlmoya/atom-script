@@ -5,55 +5,51 @@ const locators = {
     button: '.bs_slider_button',
 };
 
+
+const getScrollDirection = (lastScroll, currentScroll) => !!lastScroll & lastScroll > currentScroll ? 'left' : 'right';
+const getNextSlide = (index, direction) => index + (direction === 'left' ? 0 : 2);
+
 const onScroll = (slider, slideClass) => {
     let slides = slider.querySelectorAll(slideClass),
         buttons = getSliderButtons(slider) || [],
-        activeIndex = getActiveSlider(slides, slider);
+        activeIndex = getActiveSlider(slides, slider),
+        direction = getScrollDirection();
+    slider.dataset.lastScroll = slider.scrollLeft;
     removeActiveClass(locators.slide);
     slides[activeIndex].classList.add('is-active');
     if (buttons.length > 0) {
         removeActiveClass(locators.button);
         buttons[activeIndex].classList.add('is-active');
     }
+    //scrollToElement(slider, getNextSlide(activeIndex, direction));
 };
 
 const scrollToElement = (slider, index) => {
+    console.log(slider, index);
     let slideWith = slider.querySelector(locators.slide).scrollWidth,
         targetScroll = slideWith * (index - 1);
     slider.scrollLeft = targetScroll > slider.scrollWidth ? 0 : targetScroll;
 };
 
-const bindScrollEvents = () => {
-    let sliders = document.querySelectorAll(locators.content),
-        slideClass = locators.slide;
-    sliders.forEach(function (slider) {
-        slider.addEventListener('scroll', function (e) {
-            onScroll(e.target, slideClass);
-        });
-        onScroll(slider, slideClass);
+const bindScrollEvents = (slider) => {
+    let slideClass = locators.slide;
+    slider.addEventListener('scroll', function (e) {
+        onScroll(e.target, slideClass);
     });
+    onScroll(slider, slideClass);
 };
 
 const onClickArrow = ({target}) => {
-    console.log(target);
     let slider = target.closest(locators.parent).querySelector(locators.content);
     let slides = slider.querySelectorAll(locators.slide);
-    let direction = target.dataset.direction === 'left' ? 0 : 2;
-
-    scrollToElement(slider, (getActiveSlider(slides, slider) + direction));
+    scrollToElement(slider, getNextSlide(getActiveSlider(slides, slider), target.dataset.direction));
 
 };
 
-const bindArrowsEvent = () => {
-    let sliders = document.querySelectorAll(locators.parent);
-    sliders.forEach(function (slider) {
-        let arrows = slider.querySelectorAll(slider.dataset.arrow) || slider.querySelectorAll(locators.content);
-        console.log(arrows);
-        console.log(slider.dataset);
-        [...arrows].forEach((arrow) => {
-            console.log(arrow);
-            arrow.addEventListener('click', onClickArrow);
-        });
+const bindArrowsEvent = (slider) => {
+    let arrows = slider.querySelectorAll(slider.dataset.arrow) || slider.querySelectorAll(locators.content);
+    [...arrows].forEach((arrow) => {
+        arrow.addEventListener('click', onClickArrow);
     });
 };
 
@@ -78,8 +74,20 @@ const getActiveSlider = (slides, parent) => {
         slideWidth = totalScroll / slidesLength;
     return Math.floor(scrolled / (slideWidth - (slideWidth / 10)));
 };
-
+const bindAutoPlay = (slider, autoplay) => {
+    if (autoplay) {
+        setInterval(() => {
+            let slides = slider.querySelectorAll(locators.slide);
+            let sliderContent = slider.querySelector(locators.content);
+            scrollToElement(sliderContent, getNextSlide(getActiveSlider(slides, sliderContent), 'right'));
+        }, parseInt(autoplay));
+    }
+};
 (() => {
-    bindScrollEvents(locators.trigger);
-    bindArrowsEvent();
+    let sliders = document.querySelectorAll(locators.parent);
+    sliders.forEach((slider) => {
+        bindScrollEvents(slider);
+        bindArrowsEvent(slider);
+        bindAutoPlay(slider, slider.dataset.autoplay);
+    });
 })();
