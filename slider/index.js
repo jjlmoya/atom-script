@@ -18,7 +18,9 @@ const onScroll = (slider, slideClass) => {
 };
 
 const scrollToElement = (slider, index) => {
-    console.log(index);
+    let slideWith = slider.querySelector(locators.slide).scrollWidth,
+        targetScroll = slideWith * (index - 1);
+    slider.scrollLeft = targetScroll > slider.scrollWidth ? 0 : targetScroll;
 };
 
 const bindScrollEvents = () => {
@@ -33,18 +35,25 @@ const bindScrollEvents = () => {
 };
 
 const onClickArrow = ({target}) => {
-    let slider = target.closest(locators.content);
+    console.log(target);
+    let slider = target.closest(locators.parent).querySelector(locators.content);
     let slides = slider.querySelectorAll(locators.slide);
-    let direction = target.dataset.right ? 2 : 0;
+    let direction = target.dataset.direction === 'left' ? 0 : 2;
 
     scrollToElement(slider, (getActiveSlider(slides, slider) + direction));
 
 };
 
 const bindArrowsEvent = () => {
-    let sliders = document.querySelectorAll(locators.content);
+    let sliders = document.querySelectorAll(locators.parent);
     sliders.forEach(function (slider) {
-        slider.addEventListener('click', onClickArrow);
+        let arrows = slider.querySelectorAll(slider.dataset.arrow) || slider.querySelectorAll(locators.content);
+        console.log(arrows);
+        console.log(slider.dataset);
+        [...arrows].forEach((arrow) => {
+            console.log(arrow);
+            arrow.addEventListener('click', onClickArrow);
+        });
     });
 };
 
