@@ -6,37 +6,57 @@ const locators = {
 };
 
 
-const getScrollDirection = (lastScroll, currentScroll) => !!lastScroll & lastScroll > currentScroll ? 'left' : 'right';
 const getNextSlide = (index, direction) => index + (direction === 'left' ? 0 : 2);
 
+
+const activeButton = (buttons, index) => {
+    if (buttons.length > 0) {
+        removeActiveClass(locators.button);
+        buttons[index].classList.add('is-active');
+    }
+};
+
+const toggleArrows = (index, slider) => {
+    let sliderContent = slider.closest(locators.parent);
+    let arrows = [...sliderContent.querySelectorAll(sliderContent.dataset.arrow)];
+    if (!arrows.length) return;
+    arrows.forEach((arrow) => {
+        arrow.classList.remove('u-hide');
+    });
+    if (index === 0) {
+        arrows.find((e) => {
+            return e.dataset.direction === 'left';
+        }).classList.add('u-hide');
+    }
+    if (index === sliderContent.querySelectorAll(locators.slide).length - 1) {
+        arrows.find(({dataset}) => dataset.direction === 'right').classList.add('u-hide');
+    }
+
+
+};
 const onScroll = (slider, slideClass) => {
     let slides = slider.querySelectorAll(slideClass),
-        buttons = getSliderButtons(slider) || [],
-        activeIndex = getActiveSlider(slides, slider),
-        direction = getScrollDirection();
+        activeIndex = getActiveSlider(slides, slider);
     slider.dataset.lastScroll = slider.scrollLeft;
     removeActiveClass(locators.slide);
     slides[activeIndex].classList.add('is-active');
-    if (buttons.length > 0) {
-        removeActiveClass(locators.button);
-        buttons[activeIndex].classList.add('is-active');
-    }
-    //scrollToElement(slider, getNextSlide(activeIndex, direction));
+    activeButton(getSliderButtons(slider), activeIndex);
+    toggleArrows(activeIndex, slider);
+
 };
 
 const scrollToElement = (slider, index) => {
-    console.log(slider, index);
     let slideWith = slider.querySelector(locators.slide).scrollWidth,
         targetScroll = slideWith * (index - 1);
     slider.scrollLeft = targetScroll > slider.scrollWidth ? 0 : targetScroll;
 };
 
 const bindScrollEvents = (slider) => {
-    let slideClass = locators.slide;
-    slider.addEventListener('scroll', function (e) {
-        onScroll(e.target, slideClass);
+    let contentSlider = slider.querySelector(locators.content);
+    contentSlider.addEventListener('scroll', function (e) {
+        onScroll(e.target, locators.slide);
     });
-    onScroll(slider, slideClass);
+    onScroll(contentSlider, locators.slide);
 };
 
 const onClickArrow = ({target}) => {
@@ -60,12 +80,7 @@ const removeActiveClass = locator => {
     }
 };
 
-const getSliderButtons = target => {
-    const parent = target.closest(locators.parent);
-    if (!!parent) {
-        return parent.querySelectorAll(locators.button);
-    }
-};
+const getSliderButtons = target => target.closest(locators.parent).querySelectorAll(locators.button) || [];
 
 const getActiveSlider = (slides, parent) => {
     const slidesLength = slides.length,
