@@ -2,11 +2,15 @@ const locators = {
     trigger: '.bs_slider',
 };
 
-const getNextSlide = (index, direction) => index + (direction === 'left' ? 0 : 2);
+const getNextSlide = (index, direction) => {
+    return index + (direction === 'left' ? 0 : 2);
+};
 
 const activeButton = (buttons, index) => {
     removeActiveClass(buttons);
-    buttons[index].classList.add('is-active');
+    if (buttons[index]) {
+        buttons[index].classList.add('is-active');
+    }
 };
 
 const toggleArrows = (index, slider) => {
@@ -17,9 +21,7 @@ const toggleArrows = (index, slider) => {
         arrow.classList.remove('u-hide');
     });
     if (index === 0) {
-        arrows.find((e) => {
-            return e.dataset.direction === 'left';
-        }).classList.add('u-hide');
+        arrows.find(({dataset}) => dataset.direction === 'left').classList.add('u-hide');
     }
     if (index === sliderContent.querySelectorAll(sliderContent.dataset.slide).length - 1) {
         arrows.find(({dataset}) => dataset.direction === 'right').classList.add('u-hide');
@@ -51,9 +53,9 @@ const bindScrollEvents = (slider) => {
     onScroll({target: contentSlider});
 };
 
-const onClickArrow = ({target: arrow}) => {
-    let sliderContent = arrow.closest('.bs_slider');
-    console.log(sliderContent);
+const onClickArrow = ({target}) => {
+    let sliderContent = target.closest('.bs_slider');
+    let arrow = target.closest(sliderContent.dataset.arrow);
     let slider = sliderContent.querySelector(sliderContent.dataset.content);
     let slides = slider.querySelectorAll(sliderContent.dataset.slide);
     scrollToElement(slider, getNextSlide(getActiveSlider(slides, slider), arrow.dataset.direction));
@@ -81,9 +83,9 @@ const getSliderButtons = target => {
 const getActiveSlider = (slides, parent) => {
     const slidesLength = slides.length,
         scrolled = parent.scrollLeft,
-        totalScroll = parent.scrollWidth,
-        slideWidth = totalScroll / slidesLength;
-    return Math.floor(scrolled / (slideWidth - (slideWidth / 10)));
+        totalScroll = parent.scrollWidth;
+
+    return Math.floor(scrolled / (totalScroll / slidesLength));
 };
 
 const bindAutoPlay = (slider, autoplay) => {
