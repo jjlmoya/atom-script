@@ -1,5 +1,5 @@
 import './state/index';
-import './slider/index';
+import 'css-slider';
 import './tracking/index';
 import './social/index';
 import './theme/index';
