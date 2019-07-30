@@ -1,5 +1,5 @@
 import './state/index';
-import 'css-slider';
+import CSSSlider from 'css-slider';
 import './tracking/index';
 import './social/index';
 import './theme/index';
@@ -9,3 +9,9 @@ import './image/replace';
 import './heading/anchor';
 import './tooltip/index';
 import './splash/index';
+
+(() => {
+    [...document.querySelectorAll('.bs_slider')].forEach((slider) => {
+        new CSSSlider(slider, slider.dataset);
+    });
+})();
