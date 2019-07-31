@@ -25,13 +25,22 @@ export class ContentTable {
 
     fillContainer() {
         this.list.innerHTML = [...this.targetElements].map((element) => {
-            let html = element.innerText,
-                slug = stringToSlug(html);
-            element.innerHTML = html;
-            element.append(this.createPrepend(element, slug));
-            element.classList.add('l-position');
+            let {html, slug} = this.getAnchorInformation(element);
+            this.appendFakeAnchor(element, html, slug);
             return this.anchorLink(slug, html, this.settings.linkClass);
         }).join(' ');
+    }
+
+    getAnchorInformation(element) {
+        let html = element.innerText,
+            slug = stringToSlug(html);
+        return {html, slug};
+    }
+
+    appendFakeAnchor(element, html, slug) {
+        element.innerHTML = html;
+        element.append(this.createPrepend(element, slug));
+        element.classList.add('l-position');
     }
 
     anchorLink(id, html, linkClass) {
