@@ -1,37 +1,43 @@
 import {stringToSlug} from '../utils/misc';
 
-const locators = {
-    container: 'bs_anchor_container'
-};
+export class ContentTable {
+    constructor(e, selectors) {
+        this.contentTable = e;
+        this.selectors = selectors || 'h2';
+        this.settings = e.dataset || {};
+        this.targetElements = document.querySelectorAll(this.selectors);
+        this.list = this.contentTable.querySelector(e.dataset.list) || this.contentTable;
+        this.renderAnchors();
+    }
 
-const renderAnchors = (elements, prepend) => {
-    fillContainer(document.getElementsByClassName(locators.container), elements, prepend);
-};
+    renderAnchors() {
+        this.fillContainer();
+    }
 
-const fillContainer = (containers, elements) => {
-    [...containers].forEach((container) => {
-        let settings = container.dataset;
+    createPrepend(element, slug) {
+        let prepend = document.createElement('SPAN');
+        if (this.settings.prepend) {
+            prepend.classList.add(...this.settings.prepend.split(' '));
+        }
+        prepend.id = slug;
+        return prepend;
+    }
 
-        container.innerHTML = [...elements].map((element) => {
-            let prepend = document.createElement('SPAN'),
-                slug = stringToSlug(element.innerText),
-                html = element.innerText;
-            prepend.classList.add('a-text--shadow','a-text--uppercase', 'a-pad--x-5', 'l-position--absolute', 'l-position--absolute--anchor');
-            prepend.id = slug;
+    fillContainer() {
+        this.list.innerHTML = [...this.targetElements].map((element) => {
+            let html = element.innerText,
+                slug = stringToSlug(html);
             element.innerHTML = html;
-            element.append(prepend);
+            element.append(this.createPrepend(element, slug));
             element.classList.add('l-position');
-            return anchorLink(slug, html, settings.linkClass);
+            return this.anchorLink(slug, html, this.settings.linkClass);
         }).join(' ');
+    }
 
-    });
-};
+    anchorLink(id, html, linkClass) {
+        return `<li><a class="${linkClass}" href="#${id}">${html}</a></li>`;
+    }
+}
 
-const anchorLink = (id, html, linkClass) => `<a class="${linkClass}" href="#${id}">${html}</a>`;
+export const ContentTableLocator = '.bs_anchor_container';
 
-const getHeadingElements = selectors => document.querySelectorAll(selectors);
-
-(() => {
-    let selector = '.bs_anchor h2, .bs_anchor h3';
-    renderAnchors(getHeadingElements(selector));
-})();
