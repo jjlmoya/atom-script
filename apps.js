@@ -1,13 +1,15 @@
 import './state/index';
-import {SliderDefaultLocator, CSSSlider} from "css-slider";
 import './tracking/index';
 import './social/index';
 import './theme/index';
 import './social/index';
 import './utils/exitIntent';
 import './image/replace';
-import {ContentTable, ContentTableLocator} from './heading/anchor';
 import './tooltip/index';
+
+import {initTooltips} from './tooltip/index';
+import {SliderDefaultLocator, CSSSlider} from "css-slider";
+import {ContentTable, ContentTableLocator} from './heading/anchor';
 import {SplashLocator, SplashScreen} from './splash/index';
 
 
@@ -28,11 +30,12 @@ import {SplashLocator, SplashScreen} from './splash/index';
             new ContentTable(table, 'h2');
         });
     };
+
     const init = () => {
         removeSplashScreen();
         initTableContent();
         initSliders();
-
+        initTooltips();
     };
     init();
 })();

@@ -1,78 +1,78 @@
 import {tooltipTemplates} from "./templates";
-
-const locators = {
+let locators = {
     trigger: '.bs_tooltip',
     tooltip: '.bs_tooltip_content'
 };
 
-const getTooltipTemplate = (content, template) => {
-    try {
-        return tooltipTemplates[template ? template : 'default'](content);
-    } catch (e) {
-        console.error(`Error: Template "${template}" not found`);
-        return tooltipTemplates['default'](content);
-    }
-};
-
-const openTooltip = (settings, target) => {
-    target.insertAdjacentHTML('beforeend', getTooltipTemplate(settings.content, settings.template));
-};
-
-const closeTooltip = (tooltip) => {
-    if (tooltip) {
-        tooltip.remove();
-    }
-};
-
-const onClickBody = event => {
-    const tooltip = document.querySelector(locators.tooltip),
-        isClickInside = event.target.closest(locators.tooltip),
-        clickedElement = event.target,
-        triggerElement = document.querySelector(locators.trigger);
-    if (tooltip && !isClickInside && clickedElement !== triggerElement) {
-        closeTooltip(tooltip);
-        document.removeEventListener('click', onClickBody);
-    }
-};
-
-const getSettings = el => el.dataset;
-
-const onMouseOut = event => {
-    closeTooltip(document.querySelector(locators.tooltip));
-    event.target.removeEventListener('mouseout', onMouseOut);
-};
-const triggerTooltip = (event) => {
-    const tooltip = document.querySelector(locators.tooltip),
-        isClickEvent = event.type === 'click',
-        isHoverEvent = event.type === 'mouseover',
-        target = event.target;
-
-    closeTooltip(tooltip);
-    openTooltip(getSettings(target), event.target);
-
-    if (isClickEvent) {
-        document.addEventListener('click', onClickBody);
-    }
-    if (isHoverEvent) {
-        target.addEventListener('mouseout', function () {
-            closeTooltip(document.querySelector(locators.tooltip));
-        });
+export class Tooltip {
+    constructor(el) {
+        this.tooltipTrigger = el;
+        this.settings = this.tooltipTrigger.dataset;
+        this.bindEvents();
     }
 
-};
-
-const bindEvents = (elements) => {
-    elements.forEach((el) => {
-        const settings = getSettings(el);
-        if (settings.mode === 'click') {
-            el.addEventListener('click', triggerTooltip);
+    getTooltipTemplate() {
+        const {template, content} = this.settings;
+        try {
+            return tooltipTemplates[template ? template : 'default'](content);
+        } catch (e) {
+            console.error(`Error: Template "${template}" not found`);
+            return tooltipTemplates['default'](content);
         }
-        if (settings.mode === 'hover') {
-            el.addEventListener('mouseover', triggerTooltip);
+    }
+
+    openTooltip() {
+        this.tooltipTrigger
+            .insertAdjacentHTML('beforeend', this.getTooltipTemplate());
+    }
+
+    closeTooltip() {
+        const tooltip = document.querySelector(locators.tooltip);
+        if (tooltip) {
+            tooltip.remove();
         }
+    }
+
+    onClickBody(event) {
+        const isClickInside = this.tooltipTrigger.closest(locators.tooltip),
+            clickedElement = event.target,
+            triggerElement = document.querySelector(locators.trigger);
+        if (!isClickInside && clickedElement !== triggerElement) {
+            this.closeTooltip();
+            document.removeEventListener('click', this.onClickBody);
+        }
+    }
+
+    onMouseOut() {
+        this.closeTooltip();
+        this.tooltipTrigger.removeEventListener('mouseout', this.onMouseOut);
+    }
+
+    triggerTooltip({type}) {
+        this.closeTooltip();
+        this.openTooltip();
+
+
+        if (type === 'click') {
+            document.addEventListener('click', this.onClickBody.bind(this));
+        } else {
+            this.tooltipTrigger.addEventListener('mouseout', this.onMouseOut.bind(this));
+        }
+    }
+
+    bindEvents() {
+        if (this.settings.mode === 'click') {
+            this.tooltipTrigger.addEventListener('click', this.triggerTooltip.bind(this));
+        }
+        if (this.settings.mode === 'hover') {
+            this.tooltipTrigger.addEventListener('mouseover', this.triggerTooltip.bind(this));
+        }
+    }
+}
+
+export const initTooltips = () => {
+    [...document.querySelectorAll(locators.trigger)].forEach((tooltip) => {
+        new Tooltip(tooltip);
     });
 };
 
-(() => {
-    bindEvents([...document.querySelectorAll(locators.trigger)]);
-})();
