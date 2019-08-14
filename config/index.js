@@ -10,6 +10,7 @@ let Themes = [
     'forest',
     'graylord',
     'kino',
+    'laser',
     'lavandula',
     'lemon',
     'lime-sports',
