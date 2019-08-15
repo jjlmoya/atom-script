@@ -9,6 +9,7 @@ let Themes = [
     'eevee',
     'forest',
     'graylord',
+    'holy',
     'kino',
     'laser',
     'lavandula',
