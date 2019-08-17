@@ -1,6 +1,7 @@
 let Themes = [
     'aviator',
     'blueberry',
+    'bulldog',
     'cake',
     'caribbean',
     'clouds',
