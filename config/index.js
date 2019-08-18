@@ -25,6 +25,7 @@ let Themes = [
     'sky',
     'spring-melody',
     'strawberry',
+    'tosca',
     'wood',
 ];
 
