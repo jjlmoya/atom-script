@@ -9,7 +9,7 @@ const locators = {
 const bindToggleElement = (component, state, stateLocator) => {
     [...document.querySelectorAll(stateLocator)].forEach((element) => {
         element.addEventListener(locators.eventClick, (e) => {
-            component.classList.toggle(locators.activeClass, state);
+            component.classList.toggle(component.dataset.activeClass || locators.activeClass, state);
             if (component.dataset.block) {
                 if (state) {
                     ShowOverflowLayer(component);
@@ -41,12 +41,13 @@ const bindDelay = (timeout, element) => {
     }
 };
 
-const extractData = ({close, delay, active, block}) => {
+const extractData = ({close, delay, active, block, activeClass}) => {
     return {
         close: close,
         delay: delay,
         active: active,
-        block: block
+        block: block,
+        activeClass: activeClass
     };
 };
 
