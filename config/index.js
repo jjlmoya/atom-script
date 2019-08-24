@@ -10,6 +10,7 @@ let Themes = [
     'eevee',
     'forest',
     'graylord',
+    'haze',
     'holy',
     'kino',
     'laser',
