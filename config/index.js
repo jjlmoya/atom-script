@@ -8,6 +8,7 @@ let Themes = [
     'celeste',
     'diable',
     'eevee',
+    'flowers',
     'forest',
     'graylord',
     'haze',
