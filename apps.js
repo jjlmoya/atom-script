@@ -40,3 +40,5 @@ import {SplashLocator, SplashScreen} from './splash/index';
     };
     init();
 })();
+
+

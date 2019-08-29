@@ -45,5 +45,4 @@ const triggerExitIntent = element => {
     }
 })();
 
-
 module.exports = {};
