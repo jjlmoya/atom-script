@@ -3,7 +3,7 @@ export default class AutoTrigger {
         Classes.forEach(ClassToInizialize => {
             document.querySelectorAll(ClassToInizialize.defaultClass).forEach((el) => {
                 return new ClassToInizialize(el)
-            })
-        })
+            });
+        });
     }
 }
