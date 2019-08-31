@@ -1,4 +1,4 @@
-import {ShowOverflowLayer, HideOverflowLayer} from "../utils/overlay";
+import {ShowOverflowLayer, HideOverflowLayer} from "../components/overlay";
 
 const locators = {
     trigger: '.bs_state',
