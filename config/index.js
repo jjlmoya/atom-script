@@ -21,6 +21,7 @@ let Themes = [
     'lollipop',
     'mint',
     'nature',
+    'naisu',
     'paradise-orange',
     'purple-skies',
     'reverse-sky',
