@@ -2,15 +2,15 @@ import './state/index';
 import './social/index';
 import './theme/index';
 import './social/index';
-import './utils/exitIntent';
-import './service/replace';
+import './service/exitintent.service';
+import './service/replace.service';
 import './tooltip/index';
 
 import {Tracking} from './tracking/index';
 import {initTooltips} from './tooltip/index';
 import {SliderDefaultLocator, CSSSlider} from "css-slider";
-import {ContentTable, ContentTableLocator} from './components/anchor';
-import {SplashLocator, SplashScreen} from './components';
+import {ContentTable, ContentTableLocator} from './components/anchor.component';
+import {SplashLocator, SplashScreen} from './components/splash.component';
 
 
 (function () {
