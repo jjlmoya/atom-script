@@ -1,5 +1,7 @@
 import {stringToSlug} from '../utils/misc';
 
+export const ContentTableLocator = '.bs_anchor_container';
+
 export class ContentTable {
     constructor(e, selectors) {
         this.contentTable = e;
@@ -48,5 +50,4 @@ export class ContentTable {
     }
 }
 
-export const ContentTableLocator = '.bs_anchor_container';
 

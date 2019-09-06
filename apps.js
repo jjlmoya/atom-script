@@ -12,7 +12,6 @@ import {SliderDefaultLocator, CSSSlider} from "css-slider";
 import {ContentTable, ContentTableLocator} from './components/anchor.component';
 import {SplashLocator, SplashScreen} from './components/splash.component';
 
-
 (function () {
     const removeSplashScreen = () => {
         [...document.querySelectorAll(SplashLocator.trigger)].forEach((splash) => {
