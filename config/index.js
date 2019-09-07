@@ -23,6 +23,7 @@ let Themes = [
     'mint',
     'nature',
     'phalawon',
+    'pumpkin',
     'naisu',
     'paradise-orange',
     'purple-skies',
